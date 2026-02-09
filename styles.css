@@ -50,7 +50,7 @@ body {
 
 .map-fab {
   position: absolute;
-  top: calc(var(--overlay-offset-y) + 2px);
+  top: calc(var(--overlay-offset-y) + 9px);
   left: var(--overlay-offset-x);
   z-index: 520;
   min-width: 86px;
@@ -241,11 +241,11 @@ body {
     width: max-content;
     min-width: 100%;
     overflow: visible;
-    padding: 0.86rem 0.14rem 0.92rem;
+    padding: 0.44rem 0.14rem 0.58rem;
   }
 
   .filter-btn {
-    margin-block: 3px;
+    margin-block: 0;
     box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);
   }
 
