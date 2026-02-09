@@ -1,0 +1,27 @@
+# OS files
+.DS_Store
+
+# Editor/IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment/local-only files
+.env
+.env.*
+!.env.example
+
+# Build/test artifacts
+dist/
+build/
+coverage/
+.tmp/
+tmp/

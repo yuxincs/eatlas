@@ -1,0 +1,76 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Overwrite restaurants.json from repository variable
+        env:
+          RESTAURANTS: ${{ vars.RESTAURANTS }}
+        run: |
+          if [ -z "${RESTAURANTS}" ]; then
+            echo "::error::Repository variable RESTAURANTS is empty."
+            exit 1
+          fi
+
+          printf '%s' "${RESTAURANTS}" > restaurants.json
+
+          python3 - <<'PY'
+          import json
+          import pathlib
+          import sys
+
+          path = pathlib.Path("restaurants.json")
+          try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+          except Exception as exc:
+            print(f"::error::Invalid JSON in RESTAURANTS variable: {exc}")
+            sys.exit(1)
+
+          if not isinstance(payload, dict) or "restaurants" not in payload:
+            print("::warning::restaurants.json does not include top-level 'restaurants'.")
+
+          print("restaurants.json written and validated.")
+          PY
+
+      - name: Prepare static site artifact
+        run: |
+          mkdir -p site
+          cp index.html styles.css app.js restaurants.json site/
+          if [ -f CNAME ]; then
+            cp CNAME site/
+          fi
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
