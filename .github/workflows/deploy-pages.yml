@@ -38,25 +38,18 @@ jobs:
             exit 1
           fi
 
-          printf '%s' "${RESTAURANTS}" > restaurants.json
+          printf '%s' "${RESTAURANTS}" | jq -e . > restaurants.json
 
-          python3 - <<'PY'
-          import json
-          import pathlib
-          import sys
+          if ! jq -e 'type == "object"' restaurants.json > /dev/null; then
+            echo "::error::RESTAURANTS must be a JSON object."
+            exit 1
+          fi
 
-          path = pathlib.Path("restaurants.json")
-          try:
-            payload = json.loads(path.read_text(encoding="utf-8"))
-          except Exception as exc:
-            print(f"::error::Invalid JSON in RESTAURANTS variable: {exc}")
-            sys.exit(1)
+          if ! jq -e 'has("restaurants")' restaurants.json > /dev/null; then
+            echo "::warning::restaurants.json does not include top-level 'restaurants'."
+          fi
 
-          if not isinstance(payload, dict) or "restaurants" not in payload:
-            print("::warning::restaurants.json does not include top-level 'restaurants'.")
-
-          print("restaurants.json written and validated.")
-          PY
+          echo "restaurants.json written and validated with jq."
 
       - name: Prepare static site artifact
         run: |
