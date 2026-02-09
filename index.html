@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manhattan Food Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+  >
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  >
+  <link rel="stylesheet" href="styles.css?v=20260209c">
+</head>
+<body class="app-shell">
+  <main class="app-main">
+    <div class="map-wrap">
+      <button
+        id="mapOpenSidebarBtn"
+        class="btn btn-light btn-sm map-fab"
+        type="button"
+        aria-controls="sidebarPanel"
+        aria-expanded="true"
+      >
+        Hide
+      </button>
+      <div id="map" aria-label="Map of Manhattan restaurants"></div>
+      <div id="statusMessage" class="status-message is-hidden" aria-live="polite"></div>
+
+      <aside
+        id="sidebarPanel"
+        class="hover-sidebar"
+        aria-labelledby="sidebarPanelLabel"
+        aria-hidden="false"
+      >
+        <button
+          id="sidebarHeaderToggleBtn"
+          class="hover-sidebar-header"
+          type="button"
+          aria-controls="sidebarPanel"
+          aria-expanded="true"
+          aria-label="Hide restaurant list"
+        >
+          <span class="hover-sidebar-heading-group">
+            <span id="sidebarPanelLabel" class="hover-sidebar-title">Restaurants</span>
+            <span id="restaurantCount" class="hover-sidebar-count">Loading...</span>
+          </span>
+          <span class="hover-sidebar-header-indicator" aria-hidden="true">Hide</span>
+        </button>
+        <div class="hover-sidebar-body">
+          <ul id="restaurantList" class="restaurant-list" aria-label="Restaurant list"></ul>
+        </div>
+      </aside>
+
+      <div
+        id="categoryFilterDock"
+        class="filter-dock"
+        aria-label="Category filters"
+      ></div>
+    </div>
+  </main>
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+    defer
+  ></script>
+  <script src="app.js" defer></script>
+</body>
+</html>
