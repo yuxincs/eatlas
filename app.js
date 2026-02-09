@@ -116,7 +116,6 @@ async function initApp() {
     scheduleMarkerLabelLayout();
 
     setStatus("", false);
-    showUserLocation();
   } catch (error) {
     console.error(error);
     setStatus(error.message, true);
@@ -739,43 +738,6 @@ function normalizePhoto(photoEntry, i) {
     url: "https://picsum.photos/seed/fallback/640/360",
     caption: `Photo ${i + 1}`
   };
-}
-
-function showUserLocation() {
-  if (!navigator.geolocation) {
-    return;
-  }
-
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      const currentPoint = [position.coords.latitude, position.coords.longitude];
-
-      L.circleMarker(currentPoint, {
-        radius: 8,
-        color: "#ffffff",
-        weight: 2,
-        fillColor: "#1a73e8",
-        fillOpacity: 1
-      })
-        .addTo(map)
-        .bindPopup("Your location");
-
-      L.circle(currentPoint, {
-        radius: Math.min(position.coords.accuracy || 200, 300),
-        color: "#1a73e8",
-        opacity: 0.35,
-        weight: 1,
-        fillColor: "#1a73e8",
-        fillOpacity: 0.12
-      }).addTo(map);
-    },
-    () => {},
-    {
-      enableHighAccuracy: true,
-      timeout: 12000,
-      maximumAge: 0
-    }
-  );
 }
 
 function setStatus(message, isError) {
