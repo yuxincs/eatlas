@@ -18,26 +18,27 @@ const WEISZFELD_MAX_ITERATIONS = 100;
 const WEISZFELD_EPSILON = 1e-7;
 const RESTAURANT_FOCUS_ZOOM = 16;
 const CATEGORY_COLOR_PALETTE = [
-  "#6f93de", // medium blue
-  "#64b0d8", // medium cyan
-  "#68b3a0", // medium jade
-  "#a6c86d", // medium lime
-  "#d3a95b", // medium amber
-  "#d58866", // medium coral
-  "#cf7f92", // medium rose
-  "#b08cd8", // medium violet
-  "#8399db", // medium indigo
-  "#84abcd" // medium steel blue
+  "#1f77b4", // blue
+  "#ff7f0e", // orange
+  "#2ca02c", // green
+  "#d62728", // red
+  "#9467bd", // purple
+  "#17becf", // cyan
+  "#bcbd22", // olive
+  "#8c564b", // brown
+  "#e377c2", // pink
+  "#7f7f7f" // gray
 ];
 const CATEGORY_COLOR_BY_NAME = {
   Japanese: "#d76774", // inspired by Japan flag red
   Korean: "#6f92dd", // inspired by Korea flag blue/red balance
   Chinese: "#d89b45", // inspired by China flag red/yellow warmth
-  Thai: "#718fdc", // inspired by Thailand flag blue
-  "Southeast Asian": "#5ea99a", // region-inspired tropical jade
-  Steakhouse: "#b37c50", // warm neutral
-  Lebanese: "#5fa473", // inspired by Lebanon cedar green
-  Russian: "#8097db", // inspired by Russia tricolor blue tone
+  Thai: "#7c5ac8", // violet to separate from Korean blue
+  Italian: "#4b9d63", // herb green
+  "Southeast Asian": "#2eaab4", // tropical teal
+  Steakhouse: "#8b5a3c", // deep brown
+  Lebanese: "#9cab45", // cedar-olive green
+  Russian: "#b86fbd", // lilac-magenta
   Uncategorized: "#7f8da1"
 };
 
