@@ -1,0 +1,20 @@
+{
+  "name": "eatlas",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "bun scripts/build.mjs",
+    "serve": "python3 -m http.server 8080 --directory dist",
+    "check:data": "jq -e . restaurants.json"
+  },
+  "browserslist": [
+    "defaults"
+  ],
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "browserslist": "^4.25.3",
+    "browserslist-to-esbuild": "^2.1.1",
+    "esbuild": "^0.25.9",
+    "postcss": "^8.5.6"
+  }
+}
