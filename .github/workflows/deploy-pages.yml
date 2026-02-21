@@ -26,6 +26,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
@@ -51,18 +57,13 @@ jobs:
 
           echo "restaurants.json written and validated with jq."
 
-      - name: Prepare static site artifact
-        run: |
-          mkdir -p site
-          cp index.html styles.css app.js restaurants.json site/
-          if [ -f CNAME ]; then
-            cp CNAME site/
-          fi
+      - name: Build static site artifact
+        run: bun run build
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: site
+          path: dist
 
       - name: Deploy to GitHub Pages
         id: deployment

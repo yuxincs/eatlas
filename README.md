@@ -12,28 +12,44 @@ This project is a fully static single-page app:
 - No database required
 - Deployable to any static host (GitHub Pages, Netlify, Cloudflare Pages, Vercel static output, S3, etc.)
 
-The app is built from plain static assets:
+Source files stay vanilla:
 
 - `index.html`
 - `styles.css`
 - `app.js`
 - `restaurants.json` (content data)
 
+Build output is emitted to `dist/`.
+
 ## Quick Start (Local)
 
-Use any local static file server (JSON fetch will not work with `file://`):
+Install dependencies and build with Bun:
 
 ```bash
-python3 -m http.server 8080
+bun install
+bun run build
+```
+
+Serve the built site:
+
+```bash
+bun run serve
 ```
 
 Open `http://localhost:8080`.
 
+## Build Process
+
+- JS is transpiled with `esbuild`.
+- CSS is processed with `PostCSS` + `autoprefixer`.
+- Both use `browserslist` targets set to `defaults`.
+
 ## Deployment Notes
 
-1. Upload the project files to your static host.
-2. Ensure `restaurants.json` is available at the same relative path as `index.html` (or change `DATA_FILE_PATH` in `app.js` to another URL).
-3. Verify map tiles and attribution render correctly in production.
+1. Run `bun run build`.
+2. Upload `dist/` to your static host.
+3. Ensure `restaurants.json` is available at the same relative path as `index.html` (or change `DATA_FILE_PATH` in `app.js` to another URL).
+4. Verify map tiles and attribution render correctly in production.
 
 ## Data Customization (`restaurants.json`)
 

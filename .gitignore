@@ -25,3 +25,6 @@ build/
 coverage/
 .tmp/
 tmp/
+
+# Dependencies
+node_modules/
