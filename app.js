@@ -41,6 +41,30 @@ const CATEGORY_COLOR_BY_NAME = {
   Russian: "#b86fbd", // lilac-magenta
   Uncategorized: "#7f8da1"
 };
+const DEFAULT_CATEGORY_ICON = "🍽️";
+const CATEGORY_ICON_BY_NAME = {
+  Japanese: "🍣",
+  Korean: "🥩",
+  Chinese: "🥟",
+  Thai: "🍜",
+  Italian: "🍝",
+  "Southeast Asian": "🍛",
+  Steakhouse: "🥩",
+  Bar: "🍸",
+  Lebanese: "🧆",
+  Russian: "🍲",
+  Uncategorized: DEFAULT_CATEGORY_ICON
+};
+const SUB_CATEGORY_ICON_BY_NAME = {
+  Ramen: "🍜",
+  Sushi: "🍣",
+  Dumplings: "🥟",
+  Sichuan: "🌶️",
+  "Casual Dining": "🍽️",
+  BBQ: "🍖",
+  Grill: "🔥",
+  Pasta: "🍝"
+};
 
 let map;
 let zoomControl;
@@ -339,7 +363,14 @@ function renderCategoryFilters(restaurants) {
     button.type = "button";
     button.className = "filter-btn";
     button.dataset.category = categoryKey;
-    button.textContent = categoryKey;
+    const iconEl = document.createElement("span");
+    iconEl.className = "filter-btn-icon";
+    iconEl.setAttribute("aria-hidden", "true");
+    iconEl.textContent = getCategoryIcon(categoryKey);
+    const labelEl = document.createElement("span");
+    labelEl.className = "filter-btn-label";
+    labelEl.textContent = categoryKey;
+    button.append(iconEl, labelEl);
     const categoryColor = getCategoryColor(categoryKey);
     button.style.setProperty("--category-color", categoryColor);
 
@@ -432,7 +463,24 @@ function getRestaurantSubCategoryKey(restaurant) {
 function getRestaurantListCategoryLabel(restaurant) {
   const category = getRestaurantCategoryKey(restaurant);
   const subCategory = getRestaurantSubCategoryKey(restaurant);
-  return subCategory ? `${category} · ${subCategory}` : category;
+  const icon = getSubCategoryIcon(subCategory, category);
+  if (!subCategory) {
+    return `${icon} ${category}`;
+  }
+  return `${icon} ${category} · ${subCategory}`;
+}
+
+function getCategoryIcon(categoryKey) {
+  const normalizedCategory = String(categoryKey || "Uncategorized").trim() || "Uncategorized";
+  return CATEGORY_ICON_BY_NAME[normalizedCategory] || DEFAULT_CATEGORY_ICON;
+}
+
+function getSubCategoryIcon(subCategoryKey, categoryKey) {
+  const normalizedSubCategory = String(subCategoryKey || "").trim();
+  if (normalizedSubCategory && SUB_CATEGORY_ICON_BY_NAME[normalizedSubCategory]) {
+    return SUB_CATEGORY_ICON_BY_NAME[normalizedSubCategory];
+  }
+  return getCategoryIcon(categoryKey);
 }
 
 function getRestaurantRatingValue(restaurant) {
