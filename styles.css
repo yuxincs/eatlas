@@ -719,6 +719,10 @@ body {
   color: var(--muted);
 }
 
+.popup .popup-comment {
+  white-space: pre-line;
+}
+
 .popup .popup-map-link,
 .popup .popup-reservation-link {
   display: inline-flex;
