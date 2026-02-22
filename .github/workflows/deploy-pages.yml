@@ -37,28 +37,6 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Overwrite restaurants.json from repository variable
-        env:
-          RESTAURANTS: ${{ vars.RESTAURANTS }}
-        run: |
-          if [ -z "${RESTAURANTS}" ]; then
-            echo "::error::Repository variable RESTAURANTS is empty."
-            exit 1
-          fi
-
-          printf '%s' "${RESTAURANTS}" | jq -e . > restaurants.json
-
-          if ! jq -e 'type == "object"' restaurants.json > /dev/null; then
-            echo "::error::RESTAURANTS must be a JSON object."
-            exit 1
-          fi
-
-          if ! jq -e 'has("restaurants")' restaurants.json > /dev/null; then
-            echo "::warning::restaurants.json does not include top-level 'restaurants'."
-          fi
-
-          echo "restaurants.json written and validated with jq."
-
       - name: Build static site artifact
         run: bun run build
 
