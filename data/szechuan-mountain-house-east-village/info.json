@@ -1,0 +1,14 @@
+{
+  "id": "szechuan-mountain-house-east-village",
+  "name": "Szechuan Mountain House (East Village)",
+  "category": "Chinese",
+  "subCategory": "Sichuan",
+  "lat": 40.7282594,
+  "lng": -73.9846496,
+  "address": "23 St Marks Pl, New York, NY 10003",
+  "rating": 5,
+  "specialRecommendation": false,
+  "comment": "川菜馆，口味偏正宗，热门菜很稳定。",
+  "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Szechuan+Mountain+House+23+St+Marks+Pl+New+York+NY+10003",
+  "reservationUrl": ""
+}

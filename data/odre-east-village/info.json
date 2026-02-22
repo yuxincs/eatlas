@@ -1,0 +1,15 @@
+{
+  "id": "odre-east-village",
+  "name": "ODRE",
+  "category": "Korean",
+  "lat": 40.7313977,
+  "lng": -73.9858961,
+  "address": "199 2nd Ave, New York, NY 10003",
+  "rating": 4,
+  "priceLower": 50,
+  "priceHigher": 100,
+  "specialRecommendation": false,
+  "comment": "韩餐，比较精致、创新菜。",
+  "mapsUrl": "https://maps.app.goo.gl/eLdRBKE8VpTr8Kki7?g_st=ipc",
+  "reservationUrl": "https://resy.com/cities/new-york-ny/venues/odre"
+}

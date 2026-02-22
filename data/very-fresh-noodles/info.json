@@ -1,0 +1,12 @@
+{
+  "id": "very-fresh-noodles",
+  "name": "Very Fresh Noodles",
+  "category": "Chinese",
+  "lat": 40.7421597,
+  "lng": -74.0053901,
+  "address": "409 W 15th St, New York, NY 10011 (Chelsea Market)",
+  "specialRecommendation": false,
+  "comment": "在切尔西广场里面的中餐汤面小店。",
+  "mapsUrl": "https://maps.app.goo.gl/JFZcaxKRW8faYSe98?g_st=ipc",
+  "reservationUrl": ""
+}

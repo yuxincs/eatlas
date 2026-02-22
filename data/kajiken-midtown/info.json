@@ -1,0 +1,13 @@
+{
+  "id": "kajiken-midtown",
+  "name": "Kajiken (歌志轩)",
+  "category": "Japanese",
+  "subCategory": "Ramen",
+  "lat": 40.75202,
+  "lng": -73.98657,
+  "address": "1001 6th Ave, New York, NY 10018",
+  "specialRecommendation": false,
+  "comment": "连锁日料，招牌拌面很香。",
+  "mapsUrl": "https://maps.app.goo.gl/6GLudM6gvnoUnypz9?g_st=ipc",
+  "reservationUrl": ""
+}

@@ -1,0 +1,14 @@
+{
+  "id": "mari-vanna",
+  "name": "Mari Vanna",
+  "category": "Russian",
+  "lat": 40.7387966,
+  "lng": -73.9885656,
+  "address": "41 E 20th St, New York, NY 10003",
+  "priceLower": 50,
+  "priceHigher": 100,
+  "specialRecommendation": false,
+  "comment": "俄罗斯菜，有特色，拿破仑甜品好吃。",
+  "mapsUrl": "https://maps.app.goo.gl/YMC9w2d6mMeZs32M9?g_st=ipc",
+  "reservationUrl": "https://www.opentable.com/r/mari-vanna-new-york"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "shuya-murray-hill",
+  "name": "Shuya",
+  "category": "Japanese",
+  "subCategory": "Ramen",
+  "lat": 40.7460894,
+  "lng": -73.9776287,
+  "address": "517 3rd Ave, New York, NY 10016",
+  "rating": 5,
+  "priceLower": 30,
+  "priceHigher": 40,
+  "specialRecommendation": false,
+  "comment": "拉面 + 寿司，肉做得特别嫩。",
+  "mapsUrl": "https://maps.app.goo.gl/1ZmDgLMzCi4yYxvA6?g_st=ic",
+  "reservationUrl": ""
+}

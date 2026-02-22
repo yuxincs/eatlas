@@ -1,0 +1,14 @@
+{
+  "id": "george-bang-bang",
+  "name": "George Bang Bang",
+  "category": "Bar",
+  "lat": 40.7456984,
+  "lng": -73.9879492,
+  "address": "13 E 30th St 1st floor, New York, NY 10016",
+  "priceLower": 50,
+  "priceHigher": 100,
+  "specialRecommendation": false,
+  "comment": "Dos fridas层次感丰富 入口酸奶味 后调轻微草本味 很喜欢 beautiful life 小甜水 好入口 the chloe 另一款小甜水 教父 old fashioned 味道浓郁丰富",
+  "mapsUrl": "https://maps.app.goo.gl/Nc4dvDurm99YeHbp9",
+  "reservationUrl": "https://resy.com/cities/new-york-ny/venues/george-bang-bang"
+}

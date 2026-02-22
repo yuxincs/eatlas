@@ -1,0 +1,14 @@
+{
+  "id": "okiboru-house-of-udon",
+  "name": "Okiboru House of Udon",
+  "category": "Japanese",
+  "subCategory": "Udon",
+  "lat": 40.72821,
+  "lng": -73.98774,
+  "address": "124 2nd Ave, New York, NY 10003",
+  "rating": 5,
+  "specialRecommendation": true,
+  "comment": "日式乌冬，味道好。但只有三种乌冬。",
+  "mapsUrl": "https://maps.app.goo.gl/6ecJ3rAZChyqdg9S9?g_st=ipc",
+  "reservationUrl": ""
+}

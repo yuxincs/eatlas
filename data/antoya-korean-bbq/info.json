@@ -1,0 +1,14 @@
+{
+  "id": "antoya-korean-bbq",
+  "name": "Antoya Korean BBQ",
+  "category": "Korean",
+  "lat": 40.7480141,
+  "lng": -73.9872738,
+  "address": "37 W 32nd St, New York, NY 10001",
+  "priceLower": 50,
+  "priceHigher": 100,
+  "specialRecommendation": false,
+  "comment": "韩式烧烤（备注：还没吃过）。",
+  "mapsUrl": "https://maps.app.goo.gl/cCRb3jd8KrdKyJRt5?g_st=ipc",
+  "reservationUrl": "https://antoyabbq.com/pages/reservation"
+}

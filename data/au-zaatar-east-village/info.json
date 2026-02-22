@@ -1,0 +1,14 @@
+{
+  "id": "au-zaatar-east-village",
+  "name": "Au Za'atar",
+  "category": "Lebanese",
+  "lat": 40.72893,
+  "lng": -73.98126,
+  "address": "188 Avenue A, New York, NY 10009",
+  "priceLower": 50,
+  "priceHigher": 100,
+  "specialRecommendation": false,
+  "comment": "黎巴嫩菜，饼和烤肉。",
+  "mapsUrl": "https://maps.app.goo.gl/7riLgRviyw6sLSzj7?g_st=ipc",
+  "reservationUrl": "https://www.auzaatar.com/reservations/"
+}

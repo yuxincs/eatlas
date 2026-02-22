@@ -1,0 +1,14 @@
+{
+  "id": "the-chemistry-room",
+  "name": "The Chemistry Room",
+  "category": "Japanese",
+  "subCategory": "Omakase",
+  "lat": 40.75972,
+  "lng": -73.98325,
+  "address": "130 W 47th St, New York, NY 10036",
+  "rating": 4,
+  "specialRecommendation": false,
+  "comment": "Midtown omakase experience.",
+  "mapsUrl": "https://www.google.com/maps/search/?api=1&query=The+Chemistry+Room+130+W+47th+St+New+York+NY+10036",
+  "reservationUrl": "https://resy.com/cities/new-york-ny/venues/the-chemistry-room-at-sushi-lab"
+}

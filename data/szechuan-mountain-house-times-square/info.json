@@ -1,0 +1,14 @@
+{
+  "id": "szechuan-mountain-house-times-square",
+  "name": "Szechuan Mountain House (Times Square)",
+  "category": "Chinese",
+  "subCategory": "Sichuan",
+  "lat": 40.7602564,
+  "lng": -73.9890317,
+  "address": "353 W 46th St, New York, NY 10036",
+  "rating": 5,
+  "specialRecommendation": false,
+  "comment": "川菜分店，靠近 Times Square，出行方便。",
+  "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Szechuan+Mountain+House+353+W+46th+St+New+York+NY+10036",
+  "reservationUrl": ""
+}
