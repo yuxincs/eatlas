@@ -3,6 +3,7 @@ import path from "node:path";
 import autoprefixer from "autoprefixer";
 import browserslist from "browserslist";
 import browserslistToEsbuild from "browserslist-to-esbuild";
+import cssnano from "cssnano";
 import { build as esbuildBuild } from "esbuild";
 import postcss from "postcss";
 
@@ -42,6 +43,9 @@ async function buildStyles(browserTargets) {
   const result = await postcss([
     autoprefixer({
       overrideBrowserslist: browserTargets
+    }),
+    cssnano({
+      preset: "default"
     })
   ]).process(cssSource, {
     from: sourcePath,
