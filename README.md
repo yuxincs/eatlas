@@ -17,9 +17,9 @@ Source files stay vanilla:
 - `index.html`
 - `styles.css`
 - `app.js`
-- `restaurants.json` (content data)
+- `data/` (modular content source)
 
-Build output is emitted to `dist/`.
+Build output is emitted to `dist/`, including a generated `dist/index.json`.
 
 ## Quick Start (Local)
 
@@ -43,26 +43,36 @@ Open `http://localhost:8080`.
 - JS is transpiled with `esbuild`.
 - CSS is processed with `PostCSS` + `autoprefixer`.
 - Both use `browserslist` targets set to `defaults`.
+- Source content is collected from `data/` and compiled into `dist/index.json`.
+- Item images under `data/<item-id>/images/` are copied to `dist/data/<item-id>/images/`.
 
 ## Deployment Notes
 
 1. Run `bun run build`.
 2. Upload `dist/` to your static host.
-3. Ensure `restaurants.json` is available at the same relative path as `index.html` (or change `DATA_FILE_PATH` in `app.js` to another URL).
+3. Ensure `index.json` is available at the same relative path as `index.html` (default app behavior).
 4. Verify map tiles and attribution render correctly in production.
 
-## Data Customization (`restaurants.json`)
+## Data Customization (`data/`)
 
-All guide content is driven by `restaurants.json`.
+All guide content is driven by the `data/` directory.
 
-### Top-level fields
+### Structure
 
-- `title` (string): Header title shown in the list panel.
-- `restaurants` (array): List of restaurant objects.
+- `data/meta.json`
+  - `{ "title": "..." }` for the guide title.
+- `data/<item-id>/info.json`
+  - Metadata for one restaurant.
+- `data/<item-id>/images/`
+  - Optional local image files for that restaurant.
+
+The build step reads all `data/*/info.json` entries and emits one combined `dist/index.json`:
+- Top-level `title`
+- Top-level `restaurants` array
 
 ### Restaurant fields
 
-- `id` (string, recommended): Stable unique ID.
+- `id` (string, required): Must match the folder name `<item-id>`.
 - `name` (string): Display name.
 - `category` (string): Main category used by filters.
 - `subCategory` (string, optional): Secondary category shown in list and sorting.
@@ -72,16 +82,18 @@ All guide content is driven by `restaurants.json`.
 - `rating` (number, optional): 1-5 star rating.
 - `priceLower` (integer, optional): Lower bound of average price per person.
 - `priceHigher` (integer, optional): Upper bound of average price per person.
-- `specialRecommendation` (boolean or string, optional):
+- `specialRecommendation` (boolean, optional):
   - `false` or missing: no ribbon
-  - `true`: default recommendation ribbon
-  - string: custom ribbon label
+  - `true`: shows the recommendation ribbon
 - `comment` (string, optional): Notes shown in popup.
 - `mapsUrl` (string, optional): "Open in Google Maps" link.
 - `reservationUrl` (string, optional): "Reserve Table" link.
 - `photos` (array, optional):
-  - String URL entries
-  - Or objects like `{ "url": "...", "caption": "..." }`
+  - Remote URL strings (left unchanged), or
+  - Local image paths relative to `data/<item-id>/images/` (rewritten to `data/<item-id>/images/...` in output), or
+  - Objects like `{ "url": "...", "caption": "..." }`
+
+If `photos` is omitted and local images exist, build auto-populates `photos` from files in `images/`.
 
 ### Sorting behavior
 

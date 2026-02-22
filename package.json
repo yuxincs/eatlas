@@ -4,8 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "bun scripts/build.mjs",
-    "serve": "bun scripts/serve.mjs",
-    "check:data": "jq -e . restaurants.json"
+    "serve": "bun scripts/serve.mjs"
   },
   "browserslist": [
     "defaults"

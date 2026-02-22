@@ -1,6 +1,6 @@
 const MANHATTAN_CENTER = [40.7831, -73.9712];
 const MANHATTAN_ZOOM = 14;
-const DATA_FILE_PATH = "restaurants.json";
+const DATA_FILE_PATH = "index.json";
 const DEFAULT_GUIDE_TITLE = "Restaurants";
 const SIDEBAR_PANEL_ID = "sidebarPanel";
 const MAP_OPEN_SIDEBAR_BUTTON_ID = "mapOpenSidebarBtn";
@@ -534,13 +534,7 @@ function getRestaurantPriceRange(restaurant) {
 }
 
 function getRestaurantSpecialRecommendationLabel(restaurant) {
-  const recommendation = restaurant?.specialRecommendation;
-  if (typeof recommendation === "string") {
-    const label = recommendation.trim();
-    return label.length > 0 ? label : null;
-  }
-
-  if (recommendation === true) {
+  if (restaurant?.specialRecommendation === true) {
     return "Recommended";
   }
 

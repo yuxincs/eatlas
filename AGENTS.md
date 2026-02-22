@@ -5,12 +5,12 @@ This file captures working agreements for AI/code agents contributing to Eatlas.
 
 ## Product intent
 - Build a map-first NYC food guide that is easy to share.
-- Keep the app fully static and deployable without a backend or build step.
+- Keep the app fully static and deployable without a backend.
 - Prioritize fast load time, mobile usability, and straightforward data editing.
 
 ## Hard constraints
-- Keep the stack vanilla: `index.html`, `styles.css`, `app.js`, `restaurants.json`.
-- Do not add Node tooling, bundlers, frameworks, or server dependencies unless explicitly requested.
+- Keep the stack vanilla: `index.html`, `styles.css`, `app.js`, `data/`, Bun scripts.
+- Do not add frameworks or server dependencies unless explicitly requested.
 - Keep map provider attribution visible (OpenStreetMap/CARTO).
 - Do not reintroduce realtime user location or GPS permission prompts.
 - Maintain compatibility with GitHub Pages static hosting.
@@ -18,19 +18,21 @@ This file captures working agreements for AI/code agents contributing to Eatlas.
 ## Repository map
 - `index.html`: App shell, CDN imports (Bootstrap and Leaflet), and layout containers.
 - `styles.css`: Visual system and responsive/mobile sheet behavior.
-- `app.js`: App logic (data load, markers, filters, list sorting, and selection state).
-- `restaurants.json`: Content source of truth (`{ "title": string, "restaurants": [] }`).
-- `.github/workflows/deploy-pages.yml`: Deployment flow; may overwrite `restaurants.json` from repo variable `RESTAURANTS`, then validates with `jq`.
+- `app.js`: App logic (loads generated `index.json`, markers, filters, list sorting, and selection state).
+- `data/`: Modular content source (`data/meta.json`, `data/<item-id>/info.json`, `data/<item-id>/images/`).
+- `scripts/build.mjs`: Build pipeline (JS/CSS transpilation + `index.json` generation + image copy).
+- `.github/workflows/deploy-pages.yml`: Deployment flow (validates data, builds `dist/`, deploys Pages).
 
-## Data contract (`restaurants.json`)
-- Keep a top-level object with `title` and a `restaurants` array.
-- Each restaurant should include stable `id`, `name`, `category`, and valid numeric `lat`/`lng`.
-- Optional fields currently supported: `subCategory`, `address`, `rating`, `priceLower`, `priceHigher`, `specialRecommendation`, `comment`, `mapsUrl`, `reservationUrl`, `photos`.
-- Preserve valid JSON formatting.
+## Data contract (`data/`)
+- Keep `data/meta.json` as a top-level object with `title`.
+- Each `data/<item-id>/info.json` should include stable `id`, `name`, `category`, and valid numeric `lat`/`lng`.
+- `id` must match `<item-id>`.
+- Optional fields currently supported: `subCategory`, `address`, `rating`, `priceLower`, `priceHigher`, `specialRecommendation` (boolean), `comment`, `mapsUrl`, `reservationUrl`, `photos`.
+- Local photos live in `data/<item-id>/images/`; build rewrites local photo paths into generated `index.json`.
 
 ## Development workflow
-- Serve locally with `python3 -m http.server 8080` (JSON fetch does not work via `file://`).
-- Validate data changes with `jq -e . restaurants.json`.
+- Run `bun run build` to regenerate `dist/`.
+- Serve locally with `bun run serve` (or any static server pointed at `dist/`).
 - Prefer small, targeted edits that match existing style (constants + function declarations + defensive checks).
 
 ## UI and behavior guardrails
