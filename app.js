@@ -17,6 +17,8 @@ const MARKER_LABEL_PADDING_PX = 4;
 const WEISZFELD_MAX_ITERATIONS = 100;
 const WEISZFELD_EPSILON = 1e-7;
 const RESTAURANT_FOCUS_ZOOM = 16;
+const PHOTO_CAROUSEL_AUTO_ADVANCE_MS = 10000;
+const PHOTO_CAROUSEL_TRANSITION_MS = 180;
 const CATEGORY_COLOR_PALETTE = [
   "#1f77b4", // blue
   "#ff7f0e", // orange
@@ -713,15 +715,29 @@ function buildPopupContent(restaurant) {
 
 function buildPhotoCarousel(photoEntries) {
   let currentIndex = 0;
+  let autoAdvanceTimerId = null;
+  let progressFrameId = null;
+  let progressCycleStartMs = 0;
+  let transitionTimeoutId = null;
   const photos = photoEntries.map((entry, i) => normalizePhoto(entry, i));
 
   const wrap = document.createElement("div");
   wrap.className = "photo-wrap";
 
+  const stageEl = document.createElement("div");
+  stageEl.className = "photo-stage";
+
   const imageEl = document.createElement("img");
   imageEl.loading = "lazy";
   imageEl.alt = photos[0].caption || "Restaurant photo 1";
   imageEl.src = photos[0].url;
+
+  const progressTrackEl = document.createElement("div");
+  progressTrackEl.className = "photo-progress-track";
+  const progressBarEl = document.createElement("div");
+  progressBarEl.className = "photo-progress-bar";
+  progressTrackEl.appendChild(progressBarEl);
+  stageEl.append(imageEl, progressTrackEl);
 
   const controls = document.createElement("div");
   controls.className = "photo-controls";
@@ -737,21 +753,117 @@ function buildPhotoCarousel(photoEntries) {
   nextButton.type = "button";
   nextButton.textContent = "Next";
 
-  function renderPhoto(index) {
+  function clearTransitionTimeout() {
+    if (transitionTimeoutId !== null) {
+      window.clearTimeout(transitionTimeoutId);
+      transitionTimeoutId = null;
+    }
+  }
+
+  function setProgress(progressValue) {
+    const clampedProgress = Math.max(0, Math.min(1, progressValue));
+    progressBarEl.style.transform = `scaleX(${clampedProgress})`;
+  }
+
+  function clearProgressFrame() {
+    if (progressFrameId !== null) {
+      window.cancelAnimationFrame(progressFrameId);
+      progressFrameId = null;
+    }
+  }
+
+  function animateProgressFrame(frameTimeMs) {
+    if (!wrap.isConnected) {
+      clearAutoAdvanceTimer();
+      clearTransitionTimeout();
+      clearProgressFrame();
+      return;
+    }
+
+    const elapsedMs = frameTimeMs - progressCycleStartMs;
+    const progressValue = elapsedMs / PHOTO_CAROUSEL_AUTO_ADVANCE_MS;
+    setProgress(progressValue);
+
+    if (elapsedMs >= PHOTO_CAROUSEL_AUTO_ADVANCE_MS) {
+      progressFrameId = null;
+      return;
+    }
+
+    progressFrameId = window.requestAnimationFrame(animateProgressFrame);
+  }
+
+  function restartProgressAnimation() {
+    clearProgressFrame();
+    setProgress(0);
+    progressCycleStartMs = window.performance.now();
+    progressFrameId = window.requestAnimationFrame(animateProgressFrame);
+  }
+
+  function clearAutoAdvanceTimer() {
+    if (autoAdvanceTimerId !== null) {
+      window.clearInterval(autoAdvanceTimerId);
+      autoAdvanceTimerId = null;
+    }
+    clearProgressFrame();
+  }
+
+  function restartAutoAdvanceTimer() {
+    if (photos.length <= 1) {
+      progressTrackEl.classList.add("is-hidden");
+      setProgress(1);
+      return;
+    }
+
+    progressTrackEl.classList.remove("is-hidden");
+    clearAutoAdvanceTimer();
+    restartProgressAnimation();
+    autoAdvanceTimerId = window.setInterval(() => {
+      if (!wrap.isConnected) {
+        clearAutoAdvanceTimer();
+        clearTransitionTimeout();
+        return;
+      }
+
+      currentIndex = (currentIndex + 1) % photos.length;
+      renderPhoto(currentIndex, { withTransition: true });
+      restartProgressAnimation();
+    }, PHOTO_CAROUSEL_AUTO_ADVANCE_MS);
+  }
+
+  function renderPhoto(index, { withTransition = false } = {}) {
     const photo = photos[index];
-    imageEl.src = photo.url;
-    imageEl.alt = photo.caption || `Restaurant photo ${index + 1}`;
-    counter.textContent = `${index + 1} / ${photos.length}`;
+    const applyPhoto = () => {
+      imageEl.src = photo.url;
+      imageEl.alt = photo.caption || `Restaurant photo ${index + 1}`;
+      counter.textContent = `${index + 1} / ${photos.length}`;
+    };
+
+    if (!withTransition) {
+      imageEl.classList.remove("is-transitioning");
+      clearTransitionTimeout();
+      applyPhoto();
+      return;
+    }
+
+    clearTransitionTimeout();
+    imageEl.classList.add("is-transitioning");
+    transitionTimeoutId = window.setTimeout(() => {
+      applyPhoto();
+      imageEl.classList.remove("is-transitioning");
+      transitionTimeoutId = null;
+    }, PHOTO_CAROUSEL_TRANSITION_MS);
   }
 
   prevButton.addEventListener("click", () => {
     currentIndex = (currentIndex - 1 + photos.length) % photos.length;
-    renderPhoto(currentIndex);
+    renderPhoto(currentIndex, { withTransition: true });
+    restartAutoAdvanceTimer();
   });
 
   nextButton.addEventListener("click", () => {
     currentIndex = (currentIndex + 1) % photos.length;
-    renderPhoto(currentIndex);
+    renderPhoto(currentIndex, { withTransition: true });
+    restartAutoAdvanceTimer();
   });
 
   if (photos.length === 1) {
@@ -760,8 +872,9 @@ function buildPhotoCarousel(photoEntries) {
   }
 
   renderPhoto(currentIndex);
+  restartAutoAdvanceTimer();
   controls.append(prevButton, counter, nextButton);
-  wrap.append(imageEl, controls);
+  wrap.append(stageEl, controls);
   return wrap;
 }
 

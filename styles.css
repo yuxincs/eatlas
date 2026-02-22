@@ -765,12 +765,47 @@ body {
   margin-top: 0.45rem;
 }
 
-.photo-wrap img {
+.photo-stage {
+  position: relative;
+}
+
+.photo-stage img {
+  display: block;
   width: 100%;
   height: 140px;
   object-fit: cover;
   border-radius: 8px;
   border: 1px solid #e5e7eb;
+  opacity: 1;
+  transition: opacity 0.18s ease-in-out;
+}
+
+.photo-stage img.is-transitioning {
+  opacity: 0.2;
+}
+
+.photo-progress-track {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(71, 85, 105, 0.22);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.photo-progress-track.is-hidden {
+  opacity: 0;
+}
+
+.photo-progress-bar {
+  width: 100%;
+  height: 100%;
+  background: rgba(100, 116, 139, 0.52);
+  transform-origin: left center;
+  transform: scaleX(0);
 }
 
 .photo-controls {
