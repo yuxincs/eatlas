@@ -1,3 +1,53 @@
 {
-  "title": "Yuxin & Yue's Food Guide to NYC"
+  "title": "Yuxin & Yue's Food Guide to NYC",
+  "categoryConfig": {
+    "defaultCategoryIcon": "🍽️",
+    "categoryColorPalette": [
+      "#1f77b4",
+      "#ff7f0e",
+      "#2ca02c",
+      "#d62728",
+      "#9467bd",
+      "#17becf",
+      "#bcbd22",
+      "#8c564b",
+      "#e377c2",
+      "#7f7f7f"
+    ],
+    "categoryColors": {
+      "Japanese": "#d76774",
+      "Korean": "#6f92dd",
+      "Chinese": "#d89b45",
+      "Thai": "#7c5ac8",
+      "Italian": "#4b9d63",
+      "Southeast Asian": "#2eaab4",
+      "Steakhouse": "#8b5a3c",
+      "Lebanese": "#9cab45",
+      "Russian": "#b86fbd",
+      "Uncategorized": "#7f8da1"
+    },
+    "categoryIcons": {
+      "Japanese": "🍣",
+      "Korean": "🥩",
+      "Chinese": "🥟",
+      "Thai": "🍜",
+      "Italian": "🍝",
+      "Southeast Asian": "🍛",
+      "Steakhouse": "🥩",
+      "Bar": "🍸",
+      "Lebanese": "🧆",
+      "Russian": "🍲",
+      "Uncategorized": "🍽️"
+    },
+    "subCategoryIcons": {
+      "Ramen": "🍜",
+      "Sushi": "🍣",
+      "Dumplings": "🥟",
+      "Sichuan": "🌶️",
+      "Casual Dining": "🍽️",
+      "BBQ": "🍖",
+      "Grill": "🔥",
+      "Pasta": "🍝"
+    }
+  }
 }

@@ -24,6 +24,10 @@ function toPosixPath(filePath) {
   return filePath.split(path.sep).join("/");
 }
 
+function isPlainObject(value) {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
 function ensureFiniteNumber(value, fieldName, itemId) {
   const parsed = Number(value);
   if (!Number.isFinite(parsed)) {
@@ -179,12 +183,20 @@ async function copyDirectoryContents(sourceDir, destinationDir) {
   }
 }
 
-async function readGuideTitle() {
+async function readGuideMeta() {
   const metaPayload = await readJsonFile(META_FILE_PATH, "data/meta.json");
-  if (typeof metaPayload?.title === "string" && metaPayload.title.trim().length > 0) {
-    return metaPayload.title.trim();
-  }
-  return DEFAULT_GUIDE_TITLE;
+  const title =
+    typeof metaPayload?.title === "string" && metaPayload.title.trim().length > 0
+      ? metaPayload.title.trim()
+      : DEFAULT_GUIDE_TITLE;
+  const categoryConfig = isPlainObject(metaPayload?.categoryConfig)
+    ? metaPayload.categoryConfig
+    : undefined;
+
+  return {
+    title,
+    categoryConfig
+  };
 }
 
 function normalizePhotoEntry(photoEntry, itemId, imageFileSet) {
@@ -311,12 +323,17 @@ async function collectRestaurants() {
   };
 }
 
-async function writeOutputIndex(title, restaurants) {
+async function writeOutputIndex(guideMeta, restaurants) {
   const outputPath = path.join(DIST_DIR, OUTPUT_INDEX_FILE_NAME);
   const payload = {
-    title,
     restaurants
   };
+
+  payload.title = guideMeta.title;
+  if (guideMeta.categoryConfig !== undefined) {
+    payload.categoryConfig = guideMeta.categoryConfig;
+  }
+
   await fs.writeFile(outputPath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
 }
 
@@ -335,7 +352,7 @@ async function copyRestaurantImages(imageCopyTasks) {
 }
 
 async function build() {
-  const title = await readGuideTitle();
+  const guideMeta = await readGuideMeta();
   const { restaurants, imageCopyTasks } = await collectRestaurants();
 
   const browserTargets = getBrowserTargets();
@@ -345,7 +362,7 @@ async function build() {
   await Promise.all([buildJavaScript(esbuildTargets), buildStyles(browserTargets)]);
   await copyStaticFiles();
   await copyRestaurantImages(imageCopyTasks);
-  await writeOutputIndex(title, restaurants);
+  await writeOutputIndex(guideMeta, restaurants);
 
   process.stdout.write(
     `Build complete. Output: dist/\nData index: dist/${OUTPUT_INDEX_FILE_NAME}\nRestaurants: ${restaurants.length}\nTargets: ${browserTargets.join(", ")}\n`

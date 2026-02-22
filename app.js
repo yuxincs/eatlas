@@ -19,7 +19,7 @@ const WEISZFELD_EPSILON = 1e-7;
 const RESTAURANT_FOCUS_ZOOM = 16;
 const PHOTO_CAROUSEL_AUTO_ADVANCE_MS = 10000;
 const PHOTO_CAROUSEL_TRANSITION_MS = 180;
-const CATEGORY_COLOR_PALETTE = [
+const FALLBACK_CATEGORY_COLOR_PALETTE = [
   "#1f77b4", // blue
   "#ff7f0e", // orange
   "#2ca02c", // green
@@ -31,42 +31,7 @@ const CATEGORY_COLOR_PALETTE = [
   "#e377c2", // pink
   "#7f7f7f" // gray
 ];
-const CATEGORY_COLOR_BY_NAME = {
-  Japanese: "#d76774", // inspired by Japan flag red
-  Korean: "#6f92dd", // inspired by Korea flag blue/red balance
-  Chinese: "#d89b45", // inspired by China flag red/yellow warmth
-  Thai: "#7c5ac8", // violet to separate from Korean blue
-  Italian: "#4b9d63", // herb green
-  "Southeast Asian": "#2eaab4", // tropical teal
-  Steakhouse: "#8b5a3c", // deep brown
-  Lebanese: "#9cab45", // cedar-olive green
-  Russian: "#b86fbd", // lilac-magenta
-  Uncategorized: "#7f8da1"
-};
-const DEFAULT_CATEGORY_ICON = "🍽️";
-const CATEGORY_ICON_BY_NAME = {
-  Japanese: "🍣",
-  Korean: "🥩",
-  Chinese: "🥟",
-  Thai: "🍜",
-  Italian: "🍝",
-  "Southeast Asian": "🍛",
-  Steakhouse: "🥩",
-  Bar: "🍸",
-  Lebanese: "🧆",
-  Russian: "🍲",
-  Uncategorized: DEFAULT_CATEGORY_ICON
-};
-const SUB_CATEGORY_ICON_BY_NAME = {
-  Ramen: "🍜",
-  Sushi: "🍣",
-  Dumplings: "🥟",
-  Sichuan: "🌶️",
-  "Casual Dining": "🍽️",
-  BBQ: "🍖",
-  Grill: "🔥",
-  Pasta: "🍝"
-};
+const FALLBACK_DEFAULT_CATEGORY_ICON = "🍽️";
 
 let map;
 let zoomControl;
@@ -96,6 +61,11 @@ let allRestaurants = [];
 let markerIndex = new Map();
 let selectedCategorySet = new Set();
 let categoryColorCache = new Map();
+let categoryColorPalette = [...FALLBACK_CATEGORY_COLOR_PALETTE];
+let categoryColorByName = {};
+let categoryIconByName = {};
+let subCategoryIconByName = {};
+let defaultCategoryIcon = FALLBACK_DEFAULT_CATEGORY_ICON;
 
 document.addEventListener("DOMContentLoaded", () => {
   statusMessageEl = document.getElementById("statusMessage");
@@ -111,7 +81,8 @@ async function initApp() {
       throw new Error("Leaflet failed to load. Check network access to the Leaflet CDN.");
     }
 
-    const { title, restaurants } = await loadRestaurantData();
+    const { title, restaurants, categoryConfig } = await loadRestaurantData();
+    applyCategoryDisplayConfig(categoryConfig);
     setGuideTitle(title);
     const optimalCenter = getOptimalRestaurantCenter(restaurants);
     defaultMapCenter = optimalCenter;
@@ -220,6 +191,77 @@ function getOptimalRestaurantCenter(restaurants) {
   return [currentLat, currentLng];
 }
 
+function isPlainObject(value) {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+function normalizeStringArray(value) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  return value
+    .map((item) => (typeof item === "string" ? item.trim() : ""))
+    .filter((item) => item.length > 0);
+}
+
+function normalizeStringMap(value) {
+  if (!isPlainObject(value)) {
+    return {};
+  }
+
+  const normalizedMap = {};
+  for (const [rawKey, rawValue] of Object.entries(value)) {
+    const normalizedKey = String(rawKey || "").trim();
+    const normalizedValue = typeof rawValue === "string" ? rawValue.trim() : "";
+    if (!normalizedKey || !normalizedValue) {
+      continue;
+    }
+    normalizedMap[normalizedKey] = normalizedValue;
+  }
+  return normalizedMap;
+}
+
+function normalizeCategoryConfig(rawConfig) {
+  if (!isPlainObject(rawConfig)) {
+    return {
+      categoryColorPalette: [],
+      categoryColors: {},
+      defaultCategoryIcon: null,
+      categoryIcons: {},
+      subCategoryIcons: {}
+    };
+  }
+
+  const defaultCategoryIconCandidate =
+    typeof rawConfig.defaultCategoryIcon === "string"
+      ? rawConfig.defaultCategoryIcon.trim()
+      : "";
+
+  return {
+    categoryColorPalette: normalizeStringArray(rawConfig.categoryColorPalette),
+    categoryColors: normalizeStringMap(rawConfig.categoryColors),
+    defaultCategoryIcon: defaultCategoryIconCandidate || null,
+    categoryIcons: normalizeStringMap(rawConfig.categoryIcons),
+    subCategoryIcons: normalizeStringMap(rawConfig.subCategoryIcons)
+  };
+}
+
+function applyCategoryDisplayConfig(rawConfig) {
+  const normalizedConfig = normalizeCategoryConfig(rawConfig);
+  categoryColorPalette =
+    normalizedConfig.categoryColorPalette.length > 0
+      ? normalizedConfig.categoryColorPalette
+      : [...FALLBACK_CATEGORY_COLOR_PALETTE];
+  categoryColorByName = normalizedConfig.categoryColors;
+  defaultCategoryIcon = normalizedConfig.defaultCategoryIcon || FALLBACK_DEFAULT_CATEGORY_ICON;
+  categoryIconByName = normalizedConfig.categoryIcons;
+  if (!Object.hasOwn(categoryIconByName, "Uncategorized")) {
+    categoryIconByName.Uncategorized = defaultCategoryIcon;
+  }
+  subCategoryIconByName = normalizedConfig.subCategoryIcons;
+  categoryColorCache.clear();
+}
+
 async function loadRestaurantData() {
   const response = await fetch(DATA_FILE_PATH, { cache: "no-store" });
   if (!response.ok) {
@@ -227,6 +269,7 @@ async function loadRestaurantData() {
   }
 
   const payload = await response.json();
+  const categoryConfig = Array.isArray(payload) ? undefined : payload?.categoryConfig;
   const title =
     typeof payload?.title === "string" && payload.title.trim().length > 0
       ? payload.title.trim()
@@ -247,7 +290,8 @@ async function loadRestaurantData() {
 
   return {
     title,
-    restaurants: filteredRestaurants
+    restaurants: filteredRestaurants,
+    categoryConfig
   };
 }
 
@@ -474,13 +518,13 @@ function getRestaurantListCategoryLabel(restaurant) {
 
 function getCategoryIcon(categoryKey) {
   const normalizedCategory = String(categoryKey || "Uncategorized").trim() || "Uncategorized";
-  return CATEGORY_ICON_BY_NAME[normalizedCategory] || DEFAULT_CATEGORY_ICON;
+  return categoryIconByName[normalizedCategory] || defaultCategoryIcon;
 }
 
 function getSubCategoryIcon(subCategoryKey, categoryKey) {
   const normalizedSubCategory = String(subCategoryKey || "").trim();
-  if (normalizedSubCategory && SUB_CATEGORY_ICON_BY_NAME[normalizedSubCategory]) {
-    return SUB_CATEGORY_ICON_BY_NAME[normalizedSubCategory];
+  if (normalizedSubCategory && subCategoryIconByName[normalizedSubCategory]) {
+    return subCategoryIconByName[normalizedSubCategory];
   }
   return getCategoryIcon(categoryKey);
 }
@@ -1573,11 +1617,11 @@ function getCategoryColor(categoryKey) {
     return cachedColor;
   }
 
-  const namedColor = CATEGORY_COLOR_BY_NAME[normalizedCategory];
+  const namedColor = categoryColorByName[normalizedCategory];
+  const colorPalette =
+    categoryColorPalette.length > 0 ? categoryColorPalette : FALLBACK_CATEGORY_COLOR_PALETTE;
   const paletteColor =
-    CATEGORY_COLOR_PALETTE[
-      Math.abs(hashString(normalizedCategory)) % CATEGORY_COLOR_PALETTE.length
-    ];
+    colorPalette[Math.abs(hashString(normalizedCategory)) % colorPalette.length];
   const color = namedColor || paletteColor;
   categoryColorCache.set(normalizedCategory, color);
   return color;

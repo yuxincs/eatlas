@@ -60,7 +60,9 @@ All guide content is driven by the `data/` directory.
 ### Structure
 
 - `data/meta.json`
-  - `{ "title": "..." }` for the guide title.
+  - Guide-level metadata.
+  - `title` controls the guide title.
+  - `categoryConfig` controls category/sub-category icons and category colors.
 - `data/<item-id>/info.json`
   - Metadata for one restaurant.
 - `data/<item-id>/images/`

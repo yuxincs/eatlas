@@ -25,6 +25,7 @@ This file captures working agreements for AI/code agents contributing to Eatlas.
 
 ## Data contract (`data/`)
 - Keep `data/meta.json` as a top-level object with `title`.
+- Keep category display config in `data/meta.json` under `categoryConfig` (category icons/colors and sub-category icons).
 - Each `data/<item-id>/info.json` should include stable `id`, `name`, `category`, and valid numeric `lat`/`lng`.
 - `id` must match `<item-id>`.
 - Optional fields currently supported: `subCategory`, `address`, `rating`, `priceLower`, `priceHigher`, `specialRecommendation` (boolean), `comment`, `mapsUrl`, `reservationUrl`, `photos`.
