@@ -919,13 +919,156 @@ function selectRestaurant(restaurantId, marker, restaurant, options) {
   }
 
   if (zoomTo) {
-    map.flyTo(marker.getLatLng(), Math.max(map.getZoom(), RESTAURANT_FOCUS_ZOOM), {
-      animate: true,
-      duration: 0.45
-    });
+    focusRestaurantOnMap(marker.getLatLng(), restaurant);
   }
 
   openRestaurantPopup(restaurant, marker);
+}
+
+function focusRestaurantOnMap(latLng, restaurant) {
+  if (!map) {
+    return;
+  }
+
+  const targetZoom = Math.max(map.getZoom(), RESTAURANT_FOCUS_ZOOM);
+  const mapSize = map.getSize?.();
+  if (!mapSize || !Number.isFinite(mapSize.x) || !Number.isFinite(mapSize.y)) {
+    map.flyTo(latLng, targetZoom, {
+      animate: true,
+      duration: 0.45
+    });
+    return;
+  }
+
+  const insets = getMapOverlayInsets();
+  const availableWidth = Math.max(80, mapSize.x - insets.left - insets.right);
+  const availableHeight = Math.max(80, mapSize.y - insets.top - insets.bottom);
+  const popupHeight = estimatePopupCardHeightPx(restaurant);
+  const popupTipHeight = 14;
+  const popupCenterY = insets.top + availableHeight / 2;
+  const minMarkerY = insets.top + 24;
+  const maxMarkerY = insets.top + availableHeight - 14;
+  const targetMarkerY = Math.min(
+    maxMarkerY,
+    Math.max(minMarkerY, popupCenterY + popupHeight / 2 + popupTipHeight)
+  );
+  const targetMarkerPoint = L.point(
+    insets.left + availableWidth * 0.5,
+    targetMarkerY
+  );
+  const centerPoint = L.point(mapSize.x / 2, mapSize.y / 2);
+  const markerOffsetFromCenter = targetMarkerPoint.subtract(centerPoint);
+
+  const markerProjectedPoint = map.project(latLng, targetZoom);
+  const targetCenterLatLng = map.unproject(
+    markerProjectedPoint.subtract(markerOffsetFromCenter),
+    targetZoom
+  );
+
+  map.flyTo(targetCenterLatLng, targetZoom, {
+    animate: true,
+    duration: 0.45
+  });
+}
+
+function getMapOverlayInsets() {
+  if (!map) {
+    return {
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0
+    };
+  }
+
+  const mapRect = map.getContainer?.().getBoundingClientRect?.();
+  if (!mapRect) {
+    return {
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0
+    };
+  }
+
+  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+  const insets = {
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0
+  };
+
+  if (isMobileLayoutActive) {
+    const sheetRect = sidebarPanelEl?.getBoundingClientRect?.();
+    if (sheetRect) {
+      const overlapHeight = Math.max(0, mapRect.bottom - sheetRect.top);
+      insets.bottom = clamp(Math.round(overlapHeight + 8), 0, Math.round(mapRect.height));
+    }
+    insets.top = 8;
+    return insets;
+  }
+
+  const sidebarVisible = Boolean(sidebarPanelEl && !sidebarPanelEl.classList.contains("is-collapsed"));
+  if (sidebarVisible) {
+    const sidebarRect = sidebarPanelEl?.getBoundingClientRect?.();
+    if (sidebarRect) {
+      const overlapWidth = Math.max(0, sidebarRect.right - mapRect.left);
+      insets.left = clamp(Math.round(overlapWidth + 8), 0, Math.round(mapRect.width));
+    }
+  }
+
+  const filterRect = filterDockEl?.getBoundingClientRect?.();
+  if (filterRect) {
+    const overlapHeight = Math.max(0, filterRect.bottom - mapRect.top);
+    insets.top = clamp(Math.round(overlapHeight + 8), 0, Math.round(mapRect.height));
+  } else {
+    insets.top = 8;
+  }
+
+  return insets;
+}
+
+function estimatePopupCardHeightPx(restaurant) {
+  let estimatedHeight = 60;
+
+  if (getRestaurantRatingValue(restaurant) !== null) {
+    estimatedHeight += 16;
+  }
+
+  if (getRestaurantPriceRange(restaurant) !== null) {
+    estimatedHeight += 18;
+  }
+
+  if (typeof restaurant?.address === "string" && restaurant.address.trim()) {
+    estimatedHeight += 22;
+  }
+
+  const commentByLanguage = normalizeLocalizedTextMap(restaurant?.comment);
+  if (commentByLanguage) {
+    const commentLanguageCode = getSelectedCommentLanguageForMap(commentByLanguage);
+    const commentText = commentByLanguage[commentLanguageCode] || "";
+    const normalizedCommentText = commentText.replace(/\r\n/g, "\n");
+    const hardLineCount = normalizedCommentText.length > 0 ? normalizedCommentText.split("\n").length : 0;
+    const estimatedSoftLineCount = Math.ceil(normalizedCommentText.length / 34);
+    const estimatedCommentLines = Math.max(hardLineCount, estimatedSoftLineCount, 1);
+    estimatedHeight += Math.min(160, estimatedCommentLines * 18);
+  }
+
+  if (typeof restaurant?.mapsUrl === "string" && restaurant.mapsUrl.trim()) {
+    estimatedHeight += 30;
+  }
+
+  if (typeof restaurant?.reservationUrl === "string" && restaurant.reservationUrl.trim()) {
+    estimatedHeight += 30;
+  }
+
+  const photos = Array.isArray(restaurant?.photos) ? restaurant.photos : [];
+  if (photos.length > 0) {
+    estimatedHeight += 190;
+  }
+
+  return Math.max(120, Math.min(420, estimatedHeight));
 }
 
 function openRestaurantPopup(restaurant, marker) {
