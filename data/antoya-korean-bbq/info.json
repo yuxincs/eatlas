@@ -8,7 +8,10 @@
   "priceLower": 50,
   "priceHigher": 100,
   "specialRecommendation": false,
-  "comment": "韩式烧烤（备注：还没吃过）。",
+  "comment": {
+    "zh": "韩式烧烤（备注：还没吃过）。",
+    "en": "Korean BBQ (note: I have not tried it yet)."
+  },
   "mapsUrl": "https://maps.app.goo.gl/cCRb3jd8KrdKyJRt5?g_st=ipc",
   "reservationUrl": "https://antoyabbq.com/pages/reservation"
 }

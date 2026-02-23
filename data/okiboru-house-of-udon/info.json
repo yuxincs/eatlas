@@ -8,7 +8,10 @@
   "address": "124 2nd Ave, New York, NY 10003",
   "rating": 5,
   "specialRecommendation": true,
-  "comment": "日式乌冬，味道好。但只有三种乌冬。",
+  "comment": {
+    "zh": "日式乌冬，味道好。但只有三种乌冬。",
+    "en": "Japanese udon with great flavor, but only three udon options."
+  },
   "mapsUrl": "https://maps.app.goo.gl/6ecJ3rAZChyqdg9S9?g_st=ipc",
   "reservationUrl": ""
 }

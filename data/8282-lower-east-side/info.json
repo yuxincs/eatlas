@@ -7,7 +7,10 @@
   "address": "84 Stanton St, New York, NY 10002",
   "rating": 5,
   "specialRecommendation": false,
-  "comment": "融合亚洲菜，味道挺不错。",
+  "comment": {
+    "zh": "融合亚洲菜，味道挺不错。",
+    "en": "Asian fusion dishes with very good flavors."
+  },
   "mapsUrl": "https://maps.app.goo.gl/Tm3DTYnCzWrsWuP79?g_st=ipc",
   "reservationUrl": "https://resy.com/cities/new-york-ny/venues/8282"
 }

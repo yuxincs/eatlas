@@ -9,7 +9,10 @@
   "priceLower": 50,
   "priceHigher": 100,
   "specialRecommendation": false,
-  "comment": "韩餐，比较精致、创新菜。",
+  "comment": {
+    "zh": "韩餐，比较精致、创新菜。",
+    "en": "Refined Korean cuisine with creative dishes."
+  },
   "mapsUrl": "https://maps.app.goo.gl/eLdRBKE8VpTr8Kki7?g_st=ipc",
   "reservationUrl": "https://resy.com/cities/new-york-ny/venues/odre"
 }

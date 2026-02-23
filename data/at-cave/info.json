@@ -6,7 +6,10 @@
   "lng": -73.9875296,
   "rating": 5,
   "specialRecommendation": false,
-  "comment": "环境很好，以茶作为基底的鸡尾酒和很漂亮好吃的小食",
+  "comment": {
+    "zh": "环境很好，以茶作为基底的鸡尾酒和很漂亮好吃的小食",
+    "en": "Great atmosphere, tea-infused cocktails, and beautiful tasty snacks."
+  },
   "mapsUrl": "https://www.google.com/maps/place/At+Cave/@40.7235483,-73.9901045,876m/data=!3m2!1e3!4b1!4m6!3m5!1s0x89c259f10b377957:0x88004c8cd7450a2d!8m2!3d40.7235443!4d-73.9875296!16s%2Fg%2F11xnvp1w3_?entry=ttu&g_ep=EgoyMDI2MDIxOC4wIKXMDSoASAFQAw%3D%3D",
   "reservationUrl": "https://www.opentable.com/r/at-cave-new-york"
 }

@@ -8,7 +8,10 @@
   "address": "353 W 46th St, New York, NY 10036",
   "rating": 5,
   "specialRecommendation": false,
-  "comment": "川菜分店，靠近 Times Square，出行方便。",
+  "comment": {
+    "zh": "川菜分店，靠近 Times Square，出行方便。",
+    "en": "A Sichuan branch near Times Square with a convenient location."
+  },
   "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Szechuan+Mountain+House+353+W+46th+St+New+York+NY+10036",
   "reservationUrl": ""
 }

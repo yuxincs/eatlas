@@ -6,7 +6,10 @@
   "lng": -73.9912033,
   "address": "651 9th Ave, New York, NY 10036",
   "specialRecommendation": false,
-  "comment": "中餐。有各种锅（比如羊蝎子）。北京菜，川菜，正常中餐。",
+  "comment": {
+    "zh": "中餐。有各种锅（比如羊蝎子）。北京菜，川菜，正常中餐。",
+    "en": "Chinese food with various hot pots (for example lamb spine pot), plus Beijing and Sichuan dishes."
+  },
   "mapsUrl": "https://maps.app.goo.gl/EbGkkcyyT7zRKBii6?g_st=ipc",
   "reservationUrl": ""
 }

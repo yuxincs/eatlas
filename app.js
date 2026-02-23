@@ -5,6 +5,7 @@ const DEFAULT_GUIDE_TITLE = "Restaurants";
 const SIDEBAR_PANEL_ID = "sidebarPanel";
 const MAP_OPEN_SIDEBAR_BUTTON_ID = "mapOpenSidebarBtn";
 const SIDEBAR_HEADER_TOGGLE_BUTTON_ID = "sidebarHeaderToggleBtn";
+const GUIDE_LANGUAGE_SWITCH_ID = "guideLanguageSwitch";
 const FILTER_DOCK_ID = "categoryFilterDock";
 const MOBILE_LAYOUT_BREAKPOINT_PX = 900;
 const MOBILE_SHEET_MIN_HEIGHT_PX = 112;
@@ -19,6 +20,17 @@ const WEISZFELD_EPSILON = 1e-7;
 const RESTAURANT_FOCUS_ZOOM = 16;
 const PHOTO_CAROUSEL_AUTO_ADVANCE_MS = 10000;
 const PHOTO_CAROUSEL_TRANSITION_MS = 180;
+const DEFAULT_COMMENT_LANGUAGE_CODE = "zh";
+const COMMENT_LANGUAGE_LABELS = {
+  zh: "中文",
+  "zh-cn": "中文",
+  "zh-hans": "中文",
+  "zh-tw": "繁體中文",
+  "zh-hk": "繁體中文",
+  en: "English",
+  "en-us": "English",
+  "en-gb": "English"
+};
 const FALLBACK_CATEGORY_COLOR_PALETTE = [
   "#1f77b4", // blue
   "#ff7f0e", // orange
@@ -43,6 +55,7 @@ let sidebarTitleEl;
 let mapOpenSidebarBtnEl;
 let sidebarHeaderToggleBtnEl;
 let sidebarHeaderIndicatorEl;
+let guideLanguageSwitchEl;
 let filterDockEl;
 let filterDockOriginalParentEl = null;
 let filterDockOriginalNextSibling = null;
@@ -66,6 +79,8 @@ let categoryColorByName = {};
 let categoryIconByName = {};
 let subCategoryIconByName = {};
 let defaultCategoryIcon = FALLBACK_DEFAULT_CATEGORY_ICON;
+let availableCommentLanguageCodes = [];
+let activeCommentLanguageCode = DEFAULT_COMMENT_LANGUAGE_CODE;
 
 document.addEventListener("DOMContentLoaded", () => {
   statusMessageEl = document.getElementById("statusMessage");
@@ -108,6 +123,7 @@ async function initApp() {
     });
 
     allRestaurants = restaurants;
+    renderGuideLanguageSwitch(restaurants);
     markerIndex = addRestaurantMarkers(restaurants);
     renderCategoryFilters(restaurants);
     applyCategoryFilters();
@@ -221,6 +237,232 @@ function normalizeStringMap(value) {
   return normalizedMap;
 }
 
+function normalizeLanguageCode(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+function normalizeLocalizedTextMap(value) {
+  if (typeof value === "string") {
+    const normalizedText = value.trim();
+    if (!normalizedText) {
+      return undefined;
+    }
+    return {
+      [DEFAULT_COMMENT_LANGUAGE_CODE]: normalizedText
+    };
+  }
+
+  if (!isPlainObject(value)) {
+    return undefined;
+  }
+
+  const normalizedMap = {};
+  for (const [rawLanguageCode, rawText] of Object.entries(value)) {
+    const normalizedLanguageCode = normalizeLanguageCode(rawLanguageCode);
+    const normalizedText = typeof rawText === "string" ? rawText.trim() : "";
+    if (!normalizedLanguageCode || !normalizedText) {
+      continue;
+    }
+    normalizedMap[normalizedLanguageCode] = normalizedText;
+  }
+
+  if (Object.keys(normalizedMap).length === 0) {
+    return undefined;
+  }
+
+  return normalizedMap;
+}
+
+function getCommentLanguageLabel(languageCode) {
+  const normalizedLanguageCode = normalizeLanguageCode(languageCode);
+  if (!normalizedLanguageCode) {
+    return "";
+  }
+  if (COMMENT_LANGUAGE_LABELS[normalizedLanguageCode]) {
+    return COMMENT_LANGUAGE_LABELS[normalizedLanguageCode];
+  }
+  return normalizedLanguageCode.toUpperCase();
+}
+
+function getDefaultCommentLanguageCode(languageCodes) {
+  const normalizedLanguageCodes = languageCodes
+    .map((code) => normalizeLanguageCode(code))
+    .filter((code, index, arr) => code && arr.indexOf(code) === index);
+
+  if (normalizedLanguageCodes.includes(DEFAULT_COMMENT_LANGUAGE_CODE)) {
+    return DEFAULT_COMMENT_LANGUAGE_CODE;
+  }
+
+  const chineseVariantCode = normalizedLanguageCodes.find((code) => code.startsWith("zh-"));
+  if (chineseVariantCode) {
+    return chineseVariantCode;
+  }
+
+  if (normalizedLanguageCodes.includes("en")) {
+    return "en";
+  }
+
+  return normalizedLanguageCodes[0] || DEFAULT_COMMENT_LANGUAGE_CODE;
+}
+
+function getOrderedCommentLanguageCodes(languageCodes, defaultLanguageCode) {
+  const orderedLanguageCodes = [];
+  const seenLanguageCodes = new Set();
+
+  for (const languageCode of languageCodes) {
+    const normalizedLanguageCode = normalizeLanguageCode(languageCode);
+    if (!normalizedLanguageCode || seenLanguageCodes.has(normalizedLanguageCode)) {
+      continue;
+    }
+    seenLanguageCodes.add(normalizedLanguageCode);
+    orderedLanguageCodes.push(normalizedLanguageCode);
+  }
+
+  if (!orderedLanguageCodes.includes(defaultLanguageCode)) {
+    return orderedLanguageCodes;
+  }
+
+  return [
+    defaultLanguageCode,
+    ...orderedLanguageCodes.filter((languageCode) => languageCode !== defaultLanguageCode)
+  ];
+}
+
+function collectCommentLanguageCodes(restaurants) {
+  const discoveredLanguageCodes = new Set();
+
+  for (const restaurant of restaurants) {
+    const commentByLanguage = normalizeLocalizedTextMap(restaurant?.comment);
+    if (!commentByLanguage) {
+      continue;
+    }
+
+    for (const rawLanguageCode of Object.keys(commentByLanguage)) {
+      const normalizedLanguageCode = normalizeLanguageCode(rawLanguageCode);
+      if (normalizedLanguageCode) {
+        discoveredLanguageCodes.add(normalizedLanguageCode);
+      }
+    }
+  }
+
+  return [...discoveredLanguageCodes];
+}
+
+function getSelectedCommentLanguageForMap(commentByLanguage) {
+  if (commentByLanguage[activeCommentLanguageCode]) {
+    return activeCommentLanguageCode;
+  }
+  return getDefaultCommentLanguageCode(Object.keys(commentByLanguage));
+}
+
+function findRestaurantById(restaurantId) {
+  if (!restaurantId) {
+    return null;
+  }
+
+  for (let i = 0; i < allRestaurants.length; i += 1) {
+    const restaurant = allRestaurants[i];
+    if (getRestaurantId(restaurant, i) === restaurantId) {
+      return restaurant;
+    }
+  }
+
+  return null;
+}
+
+function refreshActivePopupContent() {
+  if (activeRestaurantId === null || !activeRestaurantMarker) {
+    return;
+  }
+
+  if (typeof activeRestaurantMarker.isPopupOpen === "function" && !activeRestaurantMarker.isPopupOpen()) {
+    return;
+  }
+
+  const activeRestaurant = findRestaurantById(activeRestaurantId);
+  if (!activeRestaurant) {
+    return;
+  }
+
+  activeRestaurantMarker.setPopupContent(buildPopupContent(activeRestaurant));
+}
+
+function setActiveCommentLanguage(languageCode) {
+  const normalizedLanguageCode = normalizeLanguageCode(languageCode);
+  const defaultLanguageCode = getDefaultCommentLanguageCode(availableCommentLanguageCodes);
+  const nextLanguageCode = availableCommentLanguageCodes.includes(normalizedLanguageCode)
+    ? normalizedLanguageCode
+    : defaultLanguageCode;
+
+  if (!nextLanguageCode || nextLanguageCode === activeCommentLanguageCode) {
+    return;
+  }
+
+  activeCommentLanguageCode = nextLanguageCode;
+
+  if (guideLanguageSwitchEl) {
+    const languageInputs = guideLanguageSwitchEl.querySelectorAll('input[name="guide-comment-language"]');
+    languageInputs.forEach((inputEl) => {
+      if (inputEl instanceof HTMLInputElement) {
+        inputEl.checked = inputEl.value === activeCommentLanguageCode;
+      }
+    });
+  }
+
+  refreshActivePopupContent();
+}
+
+function renderGuideLanguageSwitch(restaurants) {
+  if (!guideLanguageSwitchEl) {
+    return;
+  }
+
+  const discoveredLanguageCodes = collectCommentLanguageCodes(restaurants);
+  const defaultLanguageCode = getDefaultCommentLanguageCode(discoveredLanguageCodes);
+  availableCommentLanguageCodes = getOrderedCommentLanguageCodes(
+    discoveredLanguageCodes,
+    defaultLanguageCode
+  );
+  activeCommentLanguageCode = getDefaultCommentLanguageCode(availableCommentLanguageCodes);
+
+  guideLanguageSwitchEl.innerHTML = "";
+
+  if (availableCommentLanguageCodes.length === 0) {
+    guideLanguageSwitchEl.classList.add("is-hidden");
+    return;
+  }
+
+  guideLanguageSwitchEl.classList.remove("is-hidden");
+
+  const switcherEl = document.createElement("fieldset");
+  switcherEl.className = "guide-language-switch";
+  switcherEl.setAttribute("aria-label", "Comment language");
+
+  for (const languageCode of availableCommentLanguageCodes) {
+    const optionLabelEl = document.createElement("label");
+    optionLabelEl.className = "guide-language-option";
+
+    const optionInputEl = document.createElement("input");
+    optionInputEl.type = "radio";
+    optionInputEl.name = "guide-comment-language";
+    optionInputEl.value = languageCode;
+    optionInputEl.checked = languageCode === activeCommentLanguageCode;
+    optionInputEl.addEventListener("change", () => {
+      if (optionInputEl.checked) {
+        setActiveCommentLanguage(languageCode);
+      }
+    });
+
+    const optionTextEl = document.createElement("span");
+    optionTextEl.textContent = getCommentLanguageLabel(languageCode);
+
+    optionLabelEl.append(optionInputEl, optionTextEl);
+    switcherEl.appendChild(optionLabelEl);
+  }
+
+  guideLanguageSwitchEl.appendChild(switcherEl);
+}
+
 function normalizeCategoryConfig(rawConfig) {
   if (!isPlainObject(rawConfig)) {
     return {
@@ -288,9 +530,22 @@ async function loadRestaurantData() {
     return hasValidPoint;
   });
 
+  const normalizedRestaurants = filteredRestaurants.map((restaurant) => {
+    const normalizedRestaurant = {
+      ...restaurant
+    };
+    const normalizedCommentMap = normalizeLocalizedTextMap(restaurant.comment);
+    if (normalizedCommentMap) {
+      normalizedRestaurant.comment = normalizedCommentMap;
+    } else {
+      delete normalizedRestaurant.comment;
+    }
+    return normalizedRestaurant;
+  });
+
   return {
     title,
-    restaurants: filteredRestaurants,
+    restaurants: normalizedRestaurants,
     categoryConfig
   };
 }
@@ -722,11 +977,9 @@ function buildPopupContent(restaurant) {
     container.appendChild(addressEl);
   }
 
-  if (restaurant.comment) {
-    const commentEl = document.createElement("p");
-    commentEl.className = "popup-comment";
-    commentEl.textContent = restaurant.comment;
-    container.appendChild(commentEl);
+  const commentSection = buildPopupCommentSection(restaurant);
+  if (commentSection) {
+    container.appendChild(commentSection);
   }
 
   if (restaurant.mapsUrl) {
@@ -755,6 +1008,23 @@ function buildPopupContent(restaurant) {
   }
 
   return container;
+}
+
+function buildPopupCommentSection(restaurant) {
+  const commentByLanguage = normalizeLocalizedTextMap(restaurant?.comment);
+  if (!commentByLanguage) {
+    return null;
+  }
+
+  const wrapperEl = document.createElement("section");
+  wrapperEl.className = "popup-comment-wrap";
+
+  const commentEl = document.createElement("p");
+  commentEl.className = "popup-comment";
+  const languageCode = getSelectedCommentLanguageForMap(commentByLanguage);
+  commentEl.textContent = commentByLanguage[languageCode] || "";
+  wrapperEl.appendChild(commentEl);
+  return wrapperEl;
 }
 
 function buildPhotoCarousel(photoEntries) {
@@ -1032,6 +1302,7 @@ function cacheSidebarElements() {
   sidebarHeaderIndicatorEl = sidebarHeaderToggleBtnEl?.querySelector(
     ".hover-sidebar-header-indicator"
   );
+  guideLanguageSwitchEl = document.getElementById(GUIDE_LANGUAGE_SWITCH_ID);
   filterDockEl = document.getElementById(FILTER_DOCK_ID);
   if (filterDockEl && !filterDockOriginalParentEl) {
     filterDockOriginalParentEl = filterDockEl.parentElement;

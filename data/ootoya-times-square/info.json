@@ -6,7 +6,10 @@
   "lng": -73.98606,
   "address": "141 W 41st St, New York, NY 10036",
   "specialRecommendation": false,
-  "comment": "连锁日本菜，可选种类非常丰富，味道还可以。",
+  "comment": {
+    "zh": "连锁日本菜，可选种类非常丰富，味道还可以。",
+    "en": "A Japanese chain with a very broad menu and decent flavors."
+  },
   "mapsUrl": "https://maps.app.goo.gl/bAX1cGm8vta81cN28?g_st=ipc",
   "reservationUrl": "https://resy.com/cities/new-york-ny/venues/ootoya-times-square"
 }

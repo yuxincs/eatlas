@@ -10,7 +10,10 @@
   "priceLower": 30,
   "priceHigher": 40,
   "specialRecommendation": false,
-  "comment": "拉面 + 寿司，肉做得特别嫩。",
+  "comment": {
+    "zh": "拉面 + 寿司，肉做得特别嫩。",
+    "en": "Ramen plus sushi, with especially tender meat."
+  },
   "mapsUrl": "https://maps.app.goo.gl/1ZmDgLMzCi4yYxvA6?g_st=ic",
   "reservationUrl": ""
 }

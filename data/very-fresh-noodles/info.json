@@ -6,7 +6,10 @@
   "lng": -74.0053901,
   "address": "409 W 15th St, New York, NY 10011 (Chelsea Market)",
   "specialRecommendation": false,
-  "comment": "在切尔西广场里面的中餐汤面小店。",
+  "comment": {
+    "zh": "在切尔西广场里面的中餐汤面小店。",
+    "en": "A small Chinese noodle-soup spot inside Chelsea Market."
+  },
   "mapsUrl": "https://maps.app.goo.gl/JFZcaxKRW8faYSe98?g_st=ipc",
   "reservationUrl": ""
 }

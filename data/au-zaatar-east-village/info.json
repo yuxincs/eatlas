@@ -8,7 +8,10 @@
   "priceLower": 50,
   "priceHigher": 100,
   "specialRecommendation": false,
-  "comment": "黎巴嫩菜，饼和烤肉。",
+  "comment": {
+    "zh": "黎巴嫩菜，饼和烤肉。",
+    "en": "Lebanese cuisine with flatbreads and grilled meats."
+  },
   "mapsUrl": "https://maps.app.goo.gl/7riLgRviyw6sLSzj7?g_st=ipc",
   "reservationUrl": "https://www.auzaatar.com/reservations/"
 }

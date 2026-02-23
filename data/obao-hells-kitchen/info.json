@@ -8,7 +8,10 @@
   "priceLower": 50,
   "priceHigher": 50,
   "specialRecommendation": false,
-  "comment": "东南亚菜。经典东南亚味道。",
+  "comment": {
+    "zh": "东南亚菜。经典东南亚味道。",
+    "en": "Southeast Asian cuisine with classic flavors."
+  },
   "mapsUrl": "https://maps.app.goo.gl/wpJ8g374shsJB4My9?g_st=ipc",
   "reservationUrl": "https://resy.com/cities/new-york-ny/venues/obao-hells-kitchen"
 }

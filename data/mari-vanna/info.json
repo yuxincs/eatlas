@@ -8,7 +8,10 @@
   "priceLower": 50,
   "priceHigher": 100,
   "specialRecommendation": false,
-  "comment": "俄罗斯菜，有特色，拿破仑甜品好吃。",
+  "comment": {
+    "zh": "俄罗斯菜，有特色，拿破仑甜品好吃。",
+    "en": "Russian cuisine with character; the Napoleon dessert is excellent."
+  },
   "mapsUrl": "https://maps.app.goo.gl/YMC9w2d6mMeZs32M9?g_st=ipc",
   "reservationUrl": "https://www.opentable.com/r/mari-vanna-new-york"
 }

@@ -8,7 +8,10 @@
   "address": "23 St Marks Pl, New York, NY 10003",
   "rating": 5,
   "specialRecommendation": false,
-  "comment": "川菜馆，口味偏正宗，热门菜很稳定。",
+  "comment": {
+    "zh": "川菜馆，口味偏正宗，热门菜很稳定。",
+    "en": "A Sichuan spot with authentic flavors and consistently strong signature dishes."
+  },
   "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Szechuan+Mountain+House+23+St+Marks+Pl+New+York+NY+10003",
   "reservationUrl": ""
 }

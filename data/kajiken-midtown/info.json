@@ -7,7 +7,10 @@
   "lng": -73.98657,
   "address": "1001 6th Ave, New York, NY 10018",
   "specialRecommendation": false,
-  "comment": "连锁日料，招牌拌面很香。",
+  "comment": {
+    "zh": "连锁日料，招牌拌面很香。",
+    "en": "A Japanese chain; the signature abura soba is very fragrant."
+  },
   "mapsUrl": "https://maps.app.goo.gl/6GLudM6gvnoUnypz9?g_st=ipc",
   "reservationUrl": ""
 }

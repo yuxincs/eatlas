@@ -53,6 +53,42 @@ function ensureOptionalBooleanField(value, fieldName, itemId) {
   return value;
 }
 
+function ensureLocalizedStringMapField(value, fieldName, itemId) {
+  if (!isPlainObject(value)) {
+    throw new Error(`Invalid '${fieldName}' in data/${itemId}/info.json. Expected an object.`);
+  }
+
+  const normalizedMap = {};
+  for (const [rawLanguageCode, rawText] of Object.entries(value)) {
+    const languageCode = String(rawLanguageCode || "").trim().toLowerCase();
+    const text = typeof rawText === "string" ? rawText.trim() : "";
+    if (!languageCode || !text) {
+      throw new Error(
+        `Invalid '${fieldName}' translation entry in data/${itemId}/info.json. Each key/value must be a non-empty string.`
+      );
+    }
+    normalizedMap[languageCode] = text;
+  }
+
+  if (Object.keys(normalizedMap).length === 0) {
+    throw new Error(
+      `Invalid '${fieldName}' in data/${itemId}/info.json. Provide at least one language entry.`
+    );
+  }
+
+  return normalizedMap;
+}
+
+function ensureBilingualCommentField(value, itemId) {
+  const commentMap = ensureLocalizedStringMapField(value, "comment", itemId);
+  if (!commentMap.zh || !commentMap.en) {
+    throw new Error(
+      `Invalid 'comment' in data/${itemId}/info.json. Include both 'zh' and 'en' translations.`
+    );
+  }
+  return commentMap;
+}
+
 function normalizeLocalImageReference(photoPath, itemId) {
   const normalizedRelativePath = toPosixPath(photoPath).replace(/^\/+/, "");
   if (normalizedRelativePath.length === 0 || normalizedRelativePath.includes("..")) {
@@ -281,6 +317,10 @@ async function collectRestaurants() {
         "specialRecommendation",
         itemId
       );
+    }
+
+    if (Object.hasOwn(restaurant, "comment")) {
+      restaurant.comment = ensureBilingualCommentField(restaurant.comment, itemId);
     }
 
     const itemImagesSourceDir = path.join(DATA_DIR, itemId, "images");
