@@ -1,0 +1,18 @@
+{
+  "id": "oiji-mi",
+  "name": "Oiji Mi",
+  "category": "Korean",
+  "lat": 40.7396687,
+  "lng": -73.9924795,
+  "address": "17 W 19th St, New York, NY 10011",
+  "rating": 5,
+  "priceLower": 150,
+  "priceHigher": 200,
+  "specialRecommendation": false,
+  "comment": {
+    "zh": "现代韩餐套餐餐厅；Oiji bowl 是最推荐的亮点，非酒精搭配清爽、有巧思，也很有意思。",
+    "en": "Modern Korean prix-fixe spot; the Oiji bowl is the standout, and the non-alcoholic pairing is refreshing, thoughtful, and genuinely interesting."
+  },
+  "mapsUrl": "https://www.google.com/maps/place/Oiji+Mi/@40.7396727,-73.9950544,876m/data=!3m2!1e3!4b1!4m6!3m5!1s0x89c259664d15ed79:0x5c9ea8800269810d!8m2!3d40.7396687!4d-73.9924795!16s%2Fg%2F11swkltvdd?entry=ttu&g_ep=EgoyMDI2MDQyOC4wIKXMDSoASAFQAw%3D%3D",
+  "reservationUrl": "https://www.opentable.com/r/oiji-mi-new-york"
+}
