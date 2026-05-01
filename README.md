@@ -19,7 +19,7 @@ Source files stay vanilla:
 - `app.js`
 - `data/` (modular content source)
 
-Build output is emitted to `dist/`, including a generated `dist/index.json`.
+Build output is emitted to `dist/`, including a generated/minified `dist/index.json`.
 
 ## Quick Start (Local)
 
@@ -40,8 +40,10 @@ Open `http://localhost:8080`.
 
 ## Build Process
 
-- JS is transpiled with `esbuild`.
-- CSS is processed with `PostCSS` + `autoprefixer`.
+- JS is transpiled and minified with `esbuild`.
+- CSS is processed and minified with `PostCSS`, `autoprefixer`, and `cssnano`.
+- HTML and generated JSON are minified.
+- Local JS/CSS output filenames are content-hashed for cache-safe static hosting.
 - Both use `browserslist` targets set to `defaults`.
 - Source content is collected from `data/` and compiled into `dist/index.json`.
 - Item images under `data/<item-id>/images/` are copied to `dist/data/<item-id>/images/`.

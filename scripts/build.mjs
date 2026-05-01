@@ -1,4 +1,5 @@
 import fs from "node:fs/promises";
+import { createHash } from "node:crypto";
 import path from "node:path";
 import autoprefixer from "autoprefixer";
 import browserslist from "browserslist";
@@ -12,8 +13,11 @@ const DIST_DIR = path.join(ROOT_DIR, "dist");
 const DATA_DIR = path.join(ROOT_DIR, "data");
 const META_FILE_PATH = path.join(DATA_DIR, "meta.json");
 const DEFAULT_GUIDE_TITLE = "Restaurants";
+const HTML_ENTRY_FILE_NAME = "index.html";
 const OUTPUT_INDEX_FILE_NAME = "index.json";
-const REQUIRED_STATIC_FILES = ["index.html"];
+const JS_ENTRY_FILE_NAME = "app.js";
+const CSS_ENTRY_FILE_NAME = "styles.css";
+const HASH_LENGTH = 10;
 const OPTIONAL_STATIC_FILES = ["CNAME"];
 
 function isAbsoluteUrl(value) {
@@ -22,6 +26,67 @@ function isAbsoluteUrl(value) {
 
 function toPosixPath(filePath) {
   return filePath.split(path.sep).join("/");
+}
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function getContentHashedFileName(fileName, content) {
+  const extension = path.extname(fileName);
+  const baseName = path.basename(fileName, extension);
+  const hash = createHash("sha256").update(content).digest("hex").slice(0, HASH_LENGTH);
+  return `${baseName}.${hash}${extension}`;
+}
+
+async function fingerprintFile(filePath, fileName) {
+  const content = await fs.readFile(filePath);
+  const hashedFileName = getContentHashedFileName(fileName, content);
+  await fs.rename(filePath, path.join(DIST_DIR, hashedFileName));
+  return hashedFileName;
+}
+
+function rewriteLocalAssetReferences(html, assetFileNames) {
+  let rewrittenHtml = html;
+
+  for (const [sourceFileName, outputFileName] of Object.entries(assetFileNames)) {
+    const sourcePattern = escapeRegExp(sourceFileName);
+    const referencePattern = new RegExp(
+      `(\\b(?:href|src)=["'])(?:\\./)?${sourcePattern}(?:\\?[^"']*)?(["'])`,
+      "g"
+    );
+    rewrittenHtml = rewrittenHtml.replace(referencePattern, `$1${outputFileName}$2`);
+  }
+
+  return rewrittenHtml;
+}
+
+function minifyHtml(html) {
+  const rawBlocks = [];
+  const maskedHtml = html.replace(
+    /<(script|style|pre|textarea)\b[^>]*>[\s\S]*?<\/\1>/gi,
+    (match) => {
+      const openingTagEndIndex = match.indexOf(">");
+      const closingTagStartIndex = match.lastIndexOf("</");
+      const rawContent = match.slice(openingTagEndIndex + 1, closingTagStartIndex);
+
+      if (rawContent.trim().length === 0) {
+        return match;
+      }
+
+      const token = `__HTML_RAW_BLOCK_${rawBlocks.length}__`;
+      rawBlocks.push(match);
+      return token;
+    }
+  );
+
+  return maskedHtml
+    .replace(/<!--(?!\[if\s)[\s\S]*?-->/g, "")
+    .replace(/\s+/g, " ")
+    .replace(/>\s+</g, "><")
+    .replace(/\s+(\/?)>/g, "$1>")
+    .trim()
+    .replace(/__HTML_RAW_BLOCK_(\d+)__/g, (_, index) => rawBlocks[Number(index)]);
 }
 
 function isPlainObject(value) {
@@ -131,19 +196,21 @@ function getBrowserTargets() {
 }
 
 async function buildJavaScript(esbuildTargets) {
+  const outputPath = path.join(DIST_DIR, JS_ENTRY_FILE_NAME);
   await esbuildBuild({
-    entryPoints: [path.join(ROOT_DIR, "app.js")],
-    outfile: path.join(DIST_DIR, "app.js"),
+    entryPoints: [path.join(ROOT_DIR, JS_ENTRY_FILE_NAME)],
+    outfile: outputPath,
     bundle: false,
     minify: true,
     target: esbuildTargets,
     legalComments: "none"
   });
+  return fingerprintFile(outputPath, JS_ENTRY_FILE_NAME);
 }
 
 async function buildStyles(browserTargets) {
-  const sourcePath = path.join(ROOT_DIR, "styles.css");
-  const outputPath = path.join(DIST_DIR, "styles.css");
+  const sourcePath = path.join(ROOT_DIR, CSS_ENTRY_FILE_NAME);
+  const outputPath = path.join(DIST_DIR, CSS_ENTRY_FILE_NAME);
   const cssSource = await fs.readFile(sourcePath, "utf8");
   const result = await postcss([
     autoprefixer({
@@ -158,15 +225,18 @@ async function buildStyles(browserTargets) {
     map: false
   });
   await fs.writeFile(outputPath, result.css, "utf8");
+  return fingerprintFile(outputPath, CSS_ENTRY_FILE_NAME);
 }
 
-async function copyStaticFiles() {
-  for (const fileName of REQUIRED_STATIC_FILES) {
-    const sourcePath = path.join(ROOT_DIR, fileName);
-    await fs.access(sourcePath);
-    await fs.copyFile(sourcePath, path.join(DIST_DIR, fileName));
-  }
+async function buildHtml(assetFileNames) {
+  const sourcePath = path.join(ROOT_DIR, HTML_ENTRY_FILE_NAME);
+  const outputPath = path.join(DIST_DIR, HTML_ENTRY_FILE_NAME);
+  const htmlSource = await fs.readFile(sourcePath, "utf8");
+  const rewrittenHtml = rewriteLocalAssetReferences(htmlSource, assetFileNames);
+  await fs.writeFile(outputPath, `${minifyHtml(rewrittenHtml)}\n`, "utf8");
+}
 
+async function copySupplementalStaticFiles() {
   for (const fileName of OPTIONAL_STATIC_FILES) {
     const sourcePath = path.join(ROOT_DIR, fileName);
     try {
@@ -374,7 +444,7 @@ async function writeOutputIndex(guideMeta, restaurants) {
     payload.categoryConfig = guideMeta.categoryConfig;
   }
 
-  await fs.writeFile(outputPath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
+  await fs.writeFile(outputPath, `${JSON.stringify(payload)}\n`, "utf8");
 }
 
 async function copyRestaurantImages(imageCopyTasks) {
@@ -399,13 +469,20 @@ async function build() {
   const esbuildTargets = browserslistToEsbuild(browserTargets);
 
   await ensureDistDirectory();
-  await Promise.all([buildJavaScript(esbuildTargets), buildStyles(browserTargets)]);
-  await copyStaticFiles();
+  const [scriptFileName, styleFileName] = await Promise.all([
+    buildJavaScript(esbuildTargets),
+    buildStyles(browserTargets)
+  ]);
+  await buildHtml({
+    [JS_ENTRY_FILE_NAME]: scriptFileName,
+    [CSS_ENTRY_FILE_NAME]: styleFileName
+  });
+  await copySupplementalStaticFiles();
   await copyRestaurantImages(imageCopyTasks);
   await writeOutputIndex(guideMeta, restaurants);
 
   process.stdout.write(
-    `Build complete. Output: dist/\nData index: dist/${OUTPUT_INDEX_FILE_NAME}\nRestaurants: ${restaurants.length}\nTargets: ${browserTargets.join(", ")}\n`
+    `Build complete. Output: dist/\nAssets: dist/${scriptFileName}, dist/${styleFileName}\nData index: dist/${OUTPUT_INDEX_FILE_NAME}\nRestaurants: ${restaurants.length}\nTargets: ${browserTargets.join(", ")}\n`
   );
 }
 
