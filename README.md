@@ -23,17 +23,17 @@ Build output is emitted to `dist/`, including a generated `dist/index.json`.
 
 ## Quick Start (Local)
 
-Install dependencies and build with Bun:
+Install dependencies and build with npm:
 
 ```bash
-bun install
-bun run build
+npm install
+npm run build
 ```
 
 Serve the built site:
 
 ```bash
-bun run serve
+npm run serve
 ```
 
 Open `http://localhost:8080`.
@@ -48,7 +48,7 @@ Open `http://localhost:8080`.
 
 ## Deployment Notes
 
-1. Run `bun run build`.
+1. Run `npm run build`.
 2. Upload `dist/` to your static host.
 3. Ensure `index.json` is available at the same relative path as `index.html` (default app behavior).
 4. Verify map tiles and attribution render correctly in production.

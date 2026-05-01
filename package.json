@@ -3,8 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "bun scripts/build.mjs",
-    "serve": "bun scripts/serve.mjs"
+    "build": "node scripts/build.mjs",
+    "serve": "node scripts/serve.mjs"
   },
   "browserslist": [
     "defaults"

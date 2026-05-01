@@ -9,7 +9,7 @@ This file captures working agreements for AI/code agents contributing to Eatlas.
 - Prioritize fast load time, mobile usability, and straightforward data editing.
 
 ## Hard constraints
-- Keep the stack vanilla: `index.html`, `styles.css`, `app.js`, `data/`, Bun scripts.
+- Keep the stack vanilla: `index.html`, `styles.css`, `app.js`, `data/`, Node/npm scripts.
 - Do not add frameworks or server dependencies unless explicitly requested.
 - Keep map provider attribution visible (OpenStreetMap/CARTO).
 - Do not reintroduce realtime user location or GPS permission prompts.
@@ -32,8 +32,8 @@ This file captures working agreements for AI/code agents contributing to Eatlas.
 - Local photos live in `data/<item-id>/images/`; build rewrites local photo paths into generated `index.json`.
 
 ## Development workflow
-- Run `bun run build` to regenerate `dist/`.
-- Serve locally with `bun run serve` (or any static server pointed at `dist/`).
+- Run `npm run build` to regenerate `dist/`.
+- Serve locally with `npm run serve` (or any static server pointed at `dist/`).
 - Prefer small, targeted edits that match existing style (constants + function declarations + defensive checks).
 
 ## UI and behavior guardrails
