@@ -1,0 +1,32 @@
+name: Keep Scheduled Actions Active
+
+on:
+  schedule:
+    - cron: "23 9 15 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: keep-scheduled-actions-active
+  cancel-in-progress: true
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout default branch
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+
+      - name: Create empty keepalive commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit --allow-empty \
+            -m "chore(ci): empty commit to keep scheduled GitHub Actions active" \
+            -m "GitHub automatically disables scheduled workflows after repository inactivity. This intentional empty commit creates repository activity so the monthly Pages deploy cron remains enabled."
+          git push origin HEAD:${{ github.event.repository.default_branch }}
