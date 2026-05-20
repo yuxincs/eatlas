@@ -73,6 +73,7 @@ let restaurantButtonIndex = new Map();
 let allRestaurants = [];
 let markerIndex = new Map();
 let selectedCategorySet = new Set();
+let excludedCategorySet = new Set();
 let categoryColorCache = new Map();
 let categoryColorPalette = [...FALLBACK_CATEGORY_COLOR_PALETTE];
 let categoryColorByName = {};
@@ -586,7 +587,7 @@ function renderRestaurantList(restaurants, markerIndex) {
 
   const totalCount = allRestaurants.length || restaurants.length;
   countEl.textContent =
-    selectedCategorySet.size === 0
+    !hasCategoryFilters()
       ? `${restaurants.length} places`
       : `${restaurants.length} of ${totalCount} places`;
   listEl.innerHTML = "";
@@ -697,11 +698,28 @@ function renderCategoryFilters(restaurants) {
 function toggleCategoryFilter(categoryKey) {
   if (selectedCategorySet.has(categoryKey)) {
     selectedCategorySet.delete(categoryKey);
+    excludedCategorySet.add(categoryKey);
+  } else if (excludedCategorySet.has(categoryKey)) {
+    excludedCategorySet.delete(categoryKey);
   } else {
     selectedCategorySet.add(categoryKey);
   }
 
   applyCategoryFilters();
+}
+
+function hasCategoryFilters() {
+  return selectedCategorySet.size > 0 || excludedCategorySet.size > 0;
+}
+
+function isRestaurantVisibleForCategoryFilters(restaurant) {
+  const categoryKey = getRestaurantCategoryKey(restaurant);
+
+  if (excludedCategorySet.has(categoryKey)) {
+    return false;
+  }
+
+  return selectedCategorySet.size === 0 || selectedCategorySet.has(categoryKey);
 }
 
 function applyCategoryFilters() {
@@ -714,9 +732,7 @@ function applyCategoryFilters() {
 
   allRestaurants.forEach((restaurant, index) => {
     const id = getRestaurantId(restaurant, index);
-    const isVisible =
-      selectedCategorySet.size === 0 ||
-      selectedCategorySet.has(getRestaurantCategoryKey(restaurant));
+    const isVisible = isRestaurantVisibleForCategoryFilters(restaurant);
     const marker = markerIndex.get(id);
 
     if (isVisible) {
@@ -748,8 +764,18 @@ function updateCategoryFilterButtonStates() {
   buttons.forEach((button) => {
     const category = button.dataset.category || "";
     const isActive = selectedCategorySet.has(category);
+    const isExcluded = excludedCategorySet.has(category);
     button.classList.toggle("filter-btn-active", isActive);
-    button.setAttribute("aria-pressed", String(isActive));
+    button.classList.toggle("filter-btn-excluded", isExcluded);
+    button.setAttribute("aria-pressed", isExcluded ? "mixed" : String(isActive));
+    button.setAttribute(
+      "aria-label",
+      isExcluded
+        ? `${category}: excluded`
+        : isActive
+          ? `${category}: selected`
+          : `${category}: not filtered`
+    );
   });
 }
 
