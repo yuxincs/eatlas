@@ -1,0 +1,33 @@
+{
+  "id": "nubiani-koreatown",
+  "name": "Nubiani Koreatown",
+  "category": "Korean",
+  "subCategory": "BBQ",
+  "lat": 40.7469941,
+  "lng": -73.9854149,
+  "address": "315 5th Ave 3FL, New York, NY 10016",
+  "rating": 5,
+  "priceLower": 60,
+  "priceHigher": 100,
+  "specialRecommendation": false,
+  "comment": {
+    "zh": "肉质好，牛肉猪肉都很不错，腌制的肉也不会味道过重。尤其是服务员把每一种肉都烤得恰到好处。服务周到迅速。餐后免费柚子冰激凌是亮点。唯一注意是根据人数有时长限制，基本是刚好能吃完的时间。10% off if paid by cash",
+    "en": "High-quality meat; both the beef and pork are very good, and even the marinated cuts are not overly seasoned. The servers grill every cut just right. Service is attentive and quick. The complimentary yuzu ice cream after the meal is a highlight. The only thing to note is that seating time can be limited based on party size; it is basically just enough time to finish. 10% off if paid by cash."
+  },
+  "mapsUrl": "https://www.google.com/maps/place/NUBIANI+-+Koreatown/@40.7469981,-73.9879898,17z/data=!3m2!4b1!5s0x89c259a88226a3f5:0x740bb4c0a3c9cfe2!4m6!3m5!1s0x89c2596ca1d4ed5b:0xda65d8979ab658ae!8m2!3d40.7469941!4d-73.9854149!16s%2Fg%2F11t1l2zsq1?entry=ttu&g_ep=EgoyMDI2MDUyMC4wIKXMDSoASAFQAw%3D%3D",
+  "reservationUrl": "https://resy.com/cities/new-york-ny/venues/nubiani",
+  "photos": [
+    {
+      "url": "https://static.wixstatic.com/media/8acec1_1409f8d747db4f669a442db72c156db2~mv2.jpg/v1/fill/w_640,h_360,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/VIBE%20(30)%20(1).jpg",
+      "caption": "Nubiani Koreatown dining room"
+    },
+    {
+      "url": "https://static.wixstatic.com/media/8acec1_00f729bbb52841bba21b534efb10acc3~mv2.png/v1/fill/w_500,h_280,al_c,q_75,usm_0.66_1.00_0.01,enc_auto,quality_auto/%EB%84%88%EB%B9%84%EC%95%84%EB%8B%88%20%EC%82%AC%EC%A7%841.png",
+      "caption": "Prime rib eye on the grill"
+    },
+    {
+      "url": "https://static.wixstatic.com/media/8acec1_f2741f8b03b54eb290d2e357aa94f370~mv2.png/v1/fill/w_500,h_280,al_c,q_75,usm_0.66_1.00_0.01,enc_auto,quality_auto/%EB%84%88%EB%B9%84%EC%95%84%EB%8B%88%EC%82%AC%EC%A7%842.png",
+      "caption": "Prime rib eye set"
+    }
+  ]
+}
