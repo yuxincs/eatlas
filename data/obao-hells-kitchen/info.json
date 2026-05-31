@@ -13,5 +13,15 @@
     "en": "Southeast Asian cuisine with classic flavors."
   },
   "mapsUrl": "https://maps.app.goo.gl/wpJ8g374shsJB4My9?g_st=ipc",
-  "reservationUrl": "https://resy.com/cities/new-york-ny/venues/obao-hells-kitchen"
+  "reservationUrl": "https://resy.com/cities/new-york-ny/venues/obao-hells-kitchen",
+  "photos": [
+    {
+      "url": "https://framerusercontent.com/images/ZA1tA1MlqfavkgoKBZC201HsCN0.jpg",
+      "caption": "OBAO table spread"
+    },
+    {
+      "url": "https://framerusercontent.com/images/zkr2o6iTrsrdfnX0eMfGK6w6B5c.png",
+      "caption": "OBAO curry"
+    }
+  ]
 }

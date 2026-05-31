@@ -14,5 +14,11 @@
     "en": "Refined Korean cuisine with creative dishes."
   },
   "mapsUrl": "https://maps.app.goo.gl/eLdRBKE8VpTr8Kki7?g_st=ipc",
-  "reservationUrl": "https://resy.com/cities/new-york-ny/venues/odre"
+  "reservationUrl": "https://resy.com/cities/new-york-ny/venues/odre",
+  "photos": [
+    {
+      "url": "https://images.squarespace-cdn.com/content/v1/58c9b5dfa5790a17b955dff8/8aa2e9a9-c972-4df1-ae0f-5296ac4c948c/ODRE.jpg?format=1000w",
+      "caption": "ODRE Korean set menu"
+    }
+  ]
 }

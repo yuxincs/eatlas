@@ -11,5 +11,11 @@
     "en": "A generous and refined steakhouse with a strong charcoal aroma."
   },
   "mapsUrl": "https://maps.app.goo.gl/9Dyj4DzqswWDYTb86?g_st=ipc",
-  "reservationUrl": "https://www.opentable.com/r/gallaghers-steakhouse-manhattan"
+  "reservationUrl": "https://www.opentable.com/r/gallaghers-steakhouse-manhattan",
+  "photos": [
+    {
+      "url": "https://images.getbento.com/accounts/7c910cf13273a97e19cdecd9233e3e5e/media/images/42403slide-04.jpg?w=1200&fit=max&auto=compress,format&cs=origin",
+      "caption": "Sliced steak and classic sides"
+    }
+  ]
 }

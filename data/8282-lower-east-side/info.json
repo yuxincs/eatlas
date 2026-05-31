@@ -12,5 +12,11 @@
     "en": "Asian fusion dishes with very good flavors."
   },
   "mapsUrl": "https://maps.app.goo.gl/Tm3DTYnCzWrsWuP79?g_st=ipc",
-  "reservationUrl": "https://resy.com/cities/new-york-ny/venues/8282"
+  "reservationUrl": "https://resy.com/cities/new-york-ny/venues/8282",
+  "photos": [
+    {
+      "url": "https://images.squarespace-cdn.com/content/v1/612fa89d166a5549800dccc8/c0a8b39c-e941-4a53-9ce0-fa1cf1680197/8282096.jpg?format=1000w",
+      "caption": "8282 table spread"
+    }
+  ]
 }

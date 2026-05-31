@@ -13,5 +13,19 @@
     "en": "Korean BBQ (note: I have not tried it yet)."
   },
   "mapsUrl": "https://maps.app.goo.gl/cCRb3jd8KrdKyJRt5?g_st=ipc",
-  "reservationUrl": "https://antoyabbq.com/pages/reservation"
+  "reservationUrl": "https://antoyabbq.com/pages/reservation",
+  "photos": [
+    {
+      "url": "https://antoyabbq.com/pluto-images/funnel/images/5da33aaa-aec3-439e-b13d-1e250f00ed43?w=810&fit=cover",
+      "caption": "Assorted Korean barbecue cuts with vegetables"
+    },
+    {
+      "url": "https://antoyabbq.com/pluto-images/funnel/images/ef37791a-755a-44e3-8319-7fdfe5193c91?w=810&fit=cover",
+      "caption": "Beef tongue slices with green onions and lemon"
+    },
+    {
+      "url": "https://antoyabbq.com/pluto-images/funnel/images/2453fb09-13e6-4770-a025-70c8d9dbad81?w=810&fit=cover",
+      "caption": "Marinated beef cubes with vegetables"
+    }
+  ]
 }

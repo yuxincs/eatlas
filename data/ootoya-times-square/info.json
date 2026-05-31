@@ -11,5 +11,19 @@
     "en": "A Japanese chain with a very broad menu and decent flavors."
   },
   "mapsUrl": "https://maps.app.goo.gl/bAX1cGm8vta81cN28?g_st=ipc",
-  "reservationUrl": "https://resy.com/cities/new-york-ny/venues/ootoya-times-square"
+  "reservationUrl": "https://resy.com/cities/new-york-ny/venues/ootoya-times-square",
+  "photos": [
+    {
+      "url": "https://ootoya.us/wp-content/uploads/2024/08/1.jpg",
+      "caption": "Ootoya seasonal table spread"
+    },
+    {
+      "url": "https://ootoya.us/wp-content/uploads/2024/08/2.jpg",
+      "caption": "Ootoya small dishes"
+    },
+    {
+      "url": "https://ootoya.us/wp-content/uploads/2024/08/3.jpg",
+      "caption": "Ootoya grilled fish and sushi"
+    }
+  ]
 }

@@ -11,5 +11,15 @@
     "en": "Chinese food with various hot pots (for example lamb spine pot), plus Beijing and Sichuan dishes."
   },
   "mapsUrl": "https://maps.app.goo.gl/EbGkkcyyT7zRKBii6?g_st=ipc",
-  "reservationUrl": ""
+  "reservationUrl": "",
+  "photos": [
+    {
+      "url": "https://api.chowbus.com/compendium/api/v1/image_proxy/blobs/Skg4REFRRUhiV1Z6YzJGblpRSC9nQUFCQWdFQ1NVUUJEQUFCQkZSNWNHVUJEQUFBQUJML2dBRUhORGc1TURreU5BRUVRbXh2WWdBPS0tQTh4UjhWSkhmU0o0TE95U1JiZFJaV3YzUE92OXc0WWJ3cFpBWmY1YWVwVT0",
+      "caption": "Spicy lobster and fish fillet with mapo tofu"
+    },
+    {
+      "url": "https://api.chowbus.com/compendium/api/v1/image_proxy/blobs/Skg4REFRRUhiV1Z6YzJGblpRSC9nQUFCQWdFQ1NVUUJEQUFCQkZSNWNHVUJEQUFBQUJML2dBRUhORGc1TURrMU1RRUVRbXh2WWdBPS0tcGl1ZFp4OUh5U2NzSDkxdElPMkhqRnlPYk05aDU4V28wUEltQlFkNlNPMD0",
+      "caption": "Le Sia signature braised jumbo shrimp pot"
+    }
+  ]
 }

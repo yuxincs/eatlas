@@ -13,5 +13,15 @@
     "en": "A Sichuan branch near Times Square with a convenient location."
   },
   "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Szechuan+Mountain+House+353+W+46th+St+New+York+NY+10036",
-  "reservationUrl": ""
+  "reservationUrl": "",
+  "photos": [
+    {
+      "url": "https://static.wixstatic.com/media/356544_557a2b78b5334252bd50dfbb4acb2b5d~mv2.jpg",
+      "caption": "Spicy chicken with dried chilies"
+    },
+    {
+      "url": "https://static.wixstatic.com/media/356544_76c4fc32d32e491ca713188993d81af5~mv2.jpg",
+      "caption": "Szechuan Mountain House table spread"
+    }
+  ]
 }

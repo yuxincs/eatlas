@@ -12,5 +12,15 @@
     "en": "A Japanese chain; the signature abura soba is very fragrant."
   },
   "mapsUrl": "https://maps.app.goo.gl/6GLudM6gvnoUnypz9?g_st=ipc",
-  "reservationUrl": ""
+  "reservationUrl": "",
+  "photos": [
+    {
+      "url": "https://static.wixstatic.com/media/27eac3_bf7774fb7b9748f3981a18c6aa41c426~mv2.png/v1/crop/x_0,y_10,w_928,h_907/fill/w_574,h_562,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/soba.png",
+      "caption": "Kajiken abura soba"
+    },
+    {
+      "url": "https://static.wixstatic.com/media/27eac3_2634bad26e134a15a39378adaecfb86e~mv2.png/v1/crop/x_0,y_10,w_928,h_907/fill/w_574,h_562,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/ramen-category.png",
+      "caption": "Kajiken ramen"
+    }
+  ]
 }

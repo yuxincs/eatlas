@@ -13,5 +13,15 @@
     "en": "Lebanese cuisine with flatbreads and grilled meats."
   },
   "mapsUrl": "https://maps.app.goo.gl/7riLgRviyw6sLSzj7?g_st=ipc",
-  "reservationUrl": "https://www.auzaatar.com/reservations/"
+  "reservationUrl": "https://www.auzaatar.com/reservations/",
+  "photos": [
+    {
+      "url": "https://images.getbento.com/accounts/3df6b24c6fd87be55573e7c587e2ef25/media/images/95715AuZaatar_1124_LizClayman_0348.jpg?w=1200&fit=crop&auto=compress,format&cs=origin&crop=focalpoint&fp-x=0.5&fp-y=0.5",
+      "caption": "Au Za'atar table spread"
+    },
+    {
+      "url": "https://images.getbento.com/accounts/3df6b24c6fd87be55573e7c587e2ef25/media/images/52543tableside-shwarma-01-1552680631.jpg?w=1200&fit=max&auto=compress,format&cs=origin",
+      "caption": "Tableside shawarma"
+    }
+  ]
 }

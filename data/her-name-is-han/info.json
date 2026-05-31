@@ -12,5 +12,11 @@
     "en": "Modern Korean food; budae jjigae (real ham instead of spam), and beef patty."
   },
   "mapsUrl": "https://maps.app.goo.gl/pivFPhUme123E4F28?g_st=ipc",
-  "reservationUrl": "https://resy.com/cities/new-york-ny/venues/her-name-is-han"
+  "reservationUrl": "https://resy.com/cities/new-york-ny/venues/her-name-is-han",
+  "photos": [
+    {
+      "url": "https://images.squarespace-cdn.com/content/v1/58c9b5dfa5790a17b955dff8/a7eb8fc9-dd09-46af-9bcc-a7b8e375636a/han.jpg?format=1000w",
+      "caption": "Kimchi pancake with egg"
+    }
+  ]
 }

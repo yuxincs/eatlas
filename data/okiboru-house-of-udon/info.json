@@ -13,5 +13,11 @@
     "en": "Japanese udon with great flavor, but only three udon options."
   },
   "mapsUrl": "https://maps.app.goo.gl/6ecJ3rAZChyqdg9S9?g_st=ipc",
-  "reservationUrl": ""
+  "reservationUrl": "",
+  "photos": [
+    {
+      "url": "https://static.spotapps.co/web/okiboru--com/custom/new_york_back.jpg",
+      "caption": "Okiboru noodles"
+    }
+  ]
 }

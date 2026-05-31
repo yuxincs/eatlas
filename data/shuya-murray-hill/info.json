@@ -15,5 +15,15 @@
     "en": "Ramen plus sushi, with especially tender meat."
   },
   "mapsUrl": "https://maps.app.goo.gl/1ZmDgLMzCi4yYxvA6?g_st=ic",
-  "reservationUrl": ""
+  "reservationUrl": "",
+  "photos": [
+    {
+      "url": "https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/images/NYC_Shuya_ClassicShoyuRamen_KatePrevite_00001_niepz5",
+      "caption": "Classic shoyu ramen. Photo: Kate Previte / The Infatuation"
+    },
+    {
+      "url": "https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/images/NYC_Shuya_DuckTsukemen_KatePrevite_00002_u4oxe3",
+      "caption": "Duck tsukemen. Photo: Kate Previte / The Infatuation"
+    }
+  ]
 }

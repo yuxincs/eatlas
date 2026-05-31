@@ -13,5 +13,19 @@
     "en": "Midtown omakase experience."
   },
   "mapsUrl": "https://www.google.com/maps/search/?api=1&query=The+Chemistry+Room+130+W+47th+St+New+York+NY+10036",
-  "reservationUrl": "https://resy.com/cities/new-york-ny/venues/the-chemistry-room-at-sushi-lab"
+  "reservationUrl": "https://resy.com/cities/new-york-ny/venues/the-chemistry-room-at-sushi-lab",
+  "photos": [
+    {
+      "url": "https://images.squarespace-cdn.com/content/v1/636bf0c18c6e2b7eb3e451b8/d30ec0e1-924a-4711-9da6-cdbaf77f8109/dfbd868a-e08c-4940-99ac-e09c54040da9_i0a1484.jpg?format=1000w",
+      "caption": "Sushi Lab rolls"
+    },
+    {
+      "url": "https://images.squarespace-cdn.com/content/v1/636bf0c18c6e2b7eb3e451b8/347c0624-93f6-44a6-8ba3-1057d2989bbe/be0d1ba3-82af-4eae-b45a-aadc5fe7b511_i0a1542.jpg?format=1000w",
+      "caption": "Sushi Lab nigiri"
+    },
+    {
+      "url": "https://images.squarespace-cdn.com/content/v1/636bf0c18c6e2b7eb3e451b8/d8194151-4edd-4a50-a833-8c91444569c4/d606d802-cdeb-495d-bbeb-39c3b3eef13b_i0a1716.jpg?format=1000w",
+      "caption": "Sushi Lab uni hand roll"
+    }
+  ]
 }
