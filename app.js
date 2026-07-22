@@ -1,6 +1,7 @@
 const MANHATTAN_CENTER = [40.7831, -73.9712];
 const MANHATTAN_ZOOM = 14;
 const DATA_FILE_PATH = "index.json";
+const RESTAURANT_URL_PARAM = "restaurant";
 const DEFAULT_GUIDE_TITLE = "Restaurants";
 const SIDEBAR_PANEL_ID = "sidebarPanel";
 const MAP_OPEN_SIDEBAR_BUTTON_ID = "mapOpenSidebarBtn";
@@ -128,6 +129,8 @@ async function initApp() {
     markerIndex = addRestaurantMarkers(restaurants);
     renderCategoryFilters(restaurants);
     applyCategoryFilters();
+    bindRestaurantUrlNavigation();
+    restoreRestaurantSelectionFromUrl();
     scheduleMarkerLabelLayout();
 
     setStatus("", false);
@@ -369,6 +372,77 @@ function findRestaurantById(restaurantId) {
   }
 
   return null;
+}
+
+function getRestaurantIdFromUrl() {
+  const restaurantId = new URL(window.location.href).searchParams.get(RESTAURANT_URL_PARAM);
+  return restaurantId?.trim() || null;
+}
+
+function updateRestaurantUrl(restaurantId, options = {}) {
+  const { replace = false } = options;
+  const url = new URL(window.location.href);
+  const normalizedRestaurantId = restaurantId?.trim() || null;
+
+  if (normalizedRestaurantId) {
+    url.searchParams.set(RESTAURANT_URL_PARAM, normalizedRestaurantId);
+  } else {
+    url.searchParams.delete(RESTAURANT_URL_PARAM);
+  }
+
+  if (url.href === window.location.href) {
+    return;
+  }
+
+  const historyMethod = replace ? "replaceState" : "pushState";
+  window.history[historyMethod](window.history.state, "", url);
+}
+
+function restoreRestaurantSelectionFromUrl() {
+  const restaurantId = getRestaurantIdFromUrl();
+  if (!restaurantId) {
+    return;
+  }
+
+  const restaurant = findRestaurantById(restaurantId);
+  const marker = markerIndex.get(restaurantId);
+  if (!restaurant || !marker) {
+    updateRestaurantUrl(null, { replace: true });
+    return;
+  }
+
+  selectRestaurant(restaurantId, marker, restaurant, {
+    zoomTo: true,
+    scrollList: true,
+    ensureListVisible: true,
+    toggleOnActive: false,
+    updateUrl: false
+  });
+}
+
+function bindRestaurantUrlNavigation() {
+  window.addEventListener("popstate", () => {
+    const restaurantId = getRestaurantIdFromUrl();
+    if (!restaurantId) {
+      clearActiveRestaurantSelection(true, { updateUrl: false });
+      return;
+    }
+
+    const restaurant = findRestaurantById(restaurantId);
+    const marker = markerIndex.get(restaurantId);
+    if (!restaurant || !marker) {
+      clearActiveRestaurantSelection(false, { updateUrl: false });
+      return;
+    }
+
+    selectRestaurant(restaurantId, marker, restaurant, {
+      zoomTo: true,
+      scrollList: true,
+      ensureListVisible: true,
+      toggleOnActive: false,
+      updateUrl: false
+    });
+  });
 }
 
 function refreshActivePopupContent() {
@@ -912,12 +986,14 @@ function selectRestaurant(restaurantId, marker, restaurant, options) {
     zoomTo,
     scrollList,
     ensureListVisible,
-    toggleOnActive
+    toggleOnActive,
+    updateUrl
   } = {
     zoomTo: false,
     scrollList: false,
     ensureListVisible: false,
     toggleOnActive: true,
+    updateUrl: true,
     ...options
   };
 
@@ -949,6 +1025,10 @@ function selectRestaurant(restaurantId, marker, restaurant, options) {
   }
 
   openRestaurantPopup(restaurant, marker);
+
+  if (updateUrl) {
+    updateRestaurantUrl(restaurantId);
+  }
 }
 
 function focusRestaurantOnMap(latLng, restaurant) {
@@ -1397,7 +1477,9 @@ function setActiveRestaurantSelection(restaurantId, buttonEl, marker) {
   activeRestaurantButtonEl.classList.add("restaurant-button-active");
 }
 
-function clearActiveRestaurantSelection(resetMap) {
+function clearActiveRestaurantSelection(resetMap, options = {}) {
+  const { updateUrl = true } = options;
+
   if (activeRestaurantButtonEl) {
     activeRestaurantButtonEl.classList.remove("restaurant-button-active");
   }
@@ -1406,6 +1488,10 @@ function clearActiveRestaurantSelection(resetMap) {
   activeRestaurantButtonEl = null;
   activeRestaurantMarker = null;
   map?.closePopup();
+
+  if (updateUrl) {
+    updateRestaurantUrl(null);
+  }
 
   if (resetMap && map) {
     map.flyTo(defaultMapCenter, MANHATTAN_ZOOM, {
