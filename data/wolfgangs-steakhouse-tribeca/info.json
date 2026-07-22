@@ -14,5 +14,19 @@
     "en": "Excellent dry-aged steak with a deeply beefy flavor, a charred crust, and a tender center."
   },
   "mapsUrl": "https://www.google.com/maps/place/Wolfgang's+Steakhouse/@40.7140306,-74.0417624,15z/data=!4m10!1m2!2m1!1swolfgang's+steakhouse!3m6!1s0x89c259f5a8a1c9ed:0x90fb5ececccb6c71!8m2!3d40.721252!4d-74.0096644!15sChV3b2xmZ2FuZydzIHN0ZWFraG91c2UiA4gBAVoXIhV3b2xmZ2FuZydzIHN0ZWFraG91c2WSAQtzdGVha19ob3VzZZoBJENoZERTVWhOTUc5blMwVkpRMEZuU1VONE1FNTVXakpSUlJBQuABAPoBBAgeEEM!16s%2Fg%2F1v29cys4?entry=ttu&g_ep=EgoyMDI2MDcxNS4wIKXMDSoASAFQAw%3D%3D",
-  "reservationUrl": "https://www.opentable.com/wolfgangs-steakhouse-tribeca"
+  "reservationUrl": "https://www.opentable.com/wolfgangs-steakhouse-tribeca",
+  "photos": [
+    {
+      "url": "https://new.wolfgangssteakhouse.net/images_front/dinner-min.jpg",
+      "caption": "Wolfgang's signature dry-aged steak. Photo: Wolfgang's Steakhouse"
+    },
+    {
+      "url": "https://new.wolfgangssteakhouse.net/images/sliders/2.jpg",
+      "caption": "Wine and classic steakhouse atmosphere. Photo: Wolfgang's Steakhouse"
+    },
+    {
+      "url": "https://new.wolfgangssteakhouse.net/images/sliders/4.jpg",
+      "caption": "Chilled seafood platter. Photo: Wolfgang's Steakhouse"
+    }
+  ]
 }
