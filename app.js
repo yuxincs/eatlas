@@ -1,6 +1,7 @@
 const MANHATTAN_CENTER = [40.7831, -73.9712];
 const MANHATTAN_ZOOM = 14;
 const DATA_FILE_PATH = "index.json";
+const BASEMAP_STYLE_PATH = "basemap.json";
 const RESTAURANT_URL_PARAM = "restaurant";
 const DEFAULT_GUIDE_TITLE = "Restaurants";
 const SIDEBAR_PANEL_ID = "sidebarPanel";
@@ -105,10 +106,14 @@ async function initApp() {
     defaultMapCenter = optimalCenter;
 
     map = L.map("map", {
-      zoomControl: false
+      zoomControl: false,
+      minZoom: 1,
+      maxZoom: 20,
+      maxBounds: [[-85.05112878, -Infinity], [85.05112878, Infinity]],
+      maxBoundsViscosity: 1
     }).setView(optimalCenter, MANHATTAN_ZOOM);
 
-    addBaseMapTiles();
+    await addBaseMapTiles();
     zoomControl = L.control.zoom({ position: "bottomright" }).addTo(map);
     updateMapControlPositions();
     window.requestAnimationFrame(() => {
@@ -140,14 +145,43 @@ async function initApp() {
   }
 }
 
-function addBaseMapTiles() {
-  // CARTO Positron (clean, light gray style).
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-    maxZoom: 20,
-    subdomains: "abcd",
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+async function addBaseMapTiles() {
+  if (!window.maplibregl || !L.MaplibreGL) {
+    throw new Error("The map renderer failed to load. Check your connection and reload.");
+  }
+  const response = await fetch(BASEMAP_STYLE_PATH);
+  if (!response.ok) {
+    throw new Error("The map style failed to load. Please reload the page.");
+  }
+  const style = await response.json();
+  // Adapter 0.0.22 writes to transform.center/zoom, which are read-only in
+  // MapLibre 5. Use its public camera API so the basemap follows Leaflet.
+  const VectorBasemap = L.MaplibreGL.extend({
+    _transformGL: function (gl) {
+      const center = this._map.getCenter();
+      gl.jumpTo({
+        center: [center.lng, center.lat],
+        zoom: this._map.getZoom() - 1
+      });
+    }
+  });
+  // Leaflet owns all interactions and attribution; MapLibre only draws the basemap.
+  const basemap = new VectorBasemap({
+    style,
+    interactive: false,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    // Keep the vector canvas close to Leaflet's animation rate while panning.
+    updateInterval: 16,
+    // A small edge buffer prevents exposed canvas edges during a drag.
+    padding: 0.1,
+    // Do not request additional low-resolution prefetch tiles.
+    prefetchZoomDelta: 0,
+    renderWorldCopies: true
   }).addTo(map);
+  basemap.getMaplibreMap().on("error", (event) => {
+    console.warn("Basemap failed to load", event.error);
+    setStatus("Some map details could not load. Check your connection and reload.", true);
+  });
 }
 
 function getOptimalRestaurantCenter(restaurants) {

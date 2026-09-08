@@ -478,6 +478,9 @@ async function build() {
     [CSS_ENTRY_FILE_NAME]: styleFileName
   });
   await copySupplementalStaticFiles();
+  // Required, independently editable vector source and style configuration.
+  const basemapStyle = await readJsonFile(path.join(ROOT_DIR, "basemap.json"), "basemap.json");
+  await fs.writeFile(path.join(DIST_DIR, "basemap.json"), `${JSON.stringify(basemapStyle)}\n`, "utf8");
   await copyRestaurantImages(imageCopyTasks);
   await writeOutputIndex(guideMeta, restaurants);
 

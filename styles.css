@@ -48,6 +48,10 @@ body {
   inset: 0;
 }
 
+.leaflet-gl-layer {
+  pointer-events: none;
+}
+
 .map-fab {
   position: absolute;
   top: calc(var(--overlay-offset-y) + 9px);

@@ -111,7 +111,11 @@ The list is sorted by:
 
 ## Map Attribution
 
-- Base map: OpenStreetMap data with CARTO Positron tiles.
+- Base map: OpenStreetMap Shortbread vector tiles, drawn by MapLibre GL JS through its Leaflet adapter. No API key or backend is required; WebGL is required in the browser.
+- `basemap.json` contains the tile source, font endpoint, and custom light-gray style. The build copies it into `dist/`. Edit it to adjust colors and labels or change providers; replacement tiles must use the same schema, or the style must be adapted.
+- MapLibre GL JS 5.6.1 and the Leaflet adapter 0.0.22 are pinned CDN imports in `index.html`. Leaflet still manages markers, popups, and interactions. Noto Sans label glyphs come from `demotiles.maplibre.org`.
+- `addBaseMapTiles()` adapts the older Leaflet adapter to MapLibre 5 using the public `jumpTo()` camera API. Direct writes to MapLibre's internal transform no longer move the map; preserve this compatibility override when changing the integration.
+- Tile usage follows the [OpenStreetMap vector tile policy](https://operations.osmfoundation.org/policies/vector/): keep attribution visible, allow browser caching and the Referer header, and do not add bulk downloads or offline prefetching. The community service has no availability guarantee. Native vector tiles end at zoom 14 and are rendered at higher zooms; monitor OSM's schema version changes when maintaining the source URL.
 - Keep attribution visible to comply with provider requirements.
 
 ## License
