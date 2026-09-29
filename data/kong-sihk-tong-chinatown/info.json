@@ -1,0 +1,22 @@
+{
+  "id": "kong-sihk-tong-chinatown",
+  "name": "Kong Sihk Tong 港食堂",
+  "category": "Chinese",
+  "subCategory": "Hong Kong Style",
+  "lat": 40.71537,
+  "lng": -73.998173,
+  "address": "65 Bayard St, New York, NY 10013",
+  "specialRecommendation": false,
+  "comment": {
+    "zh": "很好吃、很正宗的港式餐厅；不接受预约，需要现场排队，通常约 20–30 分钟。",
+    "en": "Delicious and authentic Hong Kong-style restaurant. Reservations are not accepted, so expect to wait in line for about 20–30 minutes."
+  },
+  "mapsUrl": "https://maps.google.com/?q=Kong+Sihk+Tong+%E6%B8%AF%E9%A3%9F%E5%A0%82+65+Bayard+St%2C+New+York%2C+NY+10013",
+  "reservationUrl": "",
+  "photos": [
+    {
+      "url": "https://kongsihktong.com/wp-content/uploads/2023/08/1.jpg",
+      "caption": "Hong Kong-style stir-fried noodles. Photo: Kong Sihk Tong"
+    }
+  ]
+}
