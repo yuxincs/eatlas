@@ -108,16 +108,6 @@ function ensureStringField(value, fieldName, itemId) {
   return value.trim();
 }
 
-function ensureOptionalBooleanField(value, fieldName, itemId) {
-  if (value === undefined) {
-    return undefined;
-  }
-  if (typeof value !== "boolean") {
-    throw new Error(`Invalid '${fieldName}' in data/${itemId}/info.json. Expected a boolean.`);
-  }
-  return value;
-}
-
 function ensureLocalizedStringMapField(value, fieldName, itemId) {
   if (!isPlainObject(value)) {
     throw new Error(`Invalid '${fieldName}' in data/${itemId}/info.json. Expected an object.`);
@@ -380,14 +370,6 @@ async function collectRestaurants() {
       lat: ensureFiniteNumber(infoPayload.lat, "lat", itemId),
       lng: ensureFiniteNumber(infoPayload.lng, "lng", itemId)
     };
-
-    if (Object.hasOwn(restaurant, "specialRecommendation")) {
-      restaurant.specialRecommendation = ensureOptionalBooleanField(
-        restaurant.specialRecommendation,
-        "specialRecommendation",
-        itemId
-      );
-    }
 
     if (Object.hasOwn(restaurant, "comment")) {
       restaurant.comment = ensureBilingualCommentField(restaurant.comment, itemId);

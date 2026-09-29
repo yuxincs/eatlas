@@ -5,10 +5,8 @@
   "lat": 40.7396687,
   "lng": -73.9924795,
   "address": "17 W 19th St, New York, NY 10011",
-  "rating": 5,
   "priceLower": 150,
   "priceHigher": 200,
-  "specialRecommendation": false,
   "comment": {
     "zh": "现代韩餐套餐餐厅；Oiji bowl 是最推荐的亮点，非酒精搭配清爽、有巧思，也很有意思。",
     "en": "Modern Korean prix-fixe spot; the Oiji bowl is the standout, and the non-alcoholic pairing is refreshing, thoughtful, and genuinely interesting."

@@ -5,10 +5,8 @@
   "lat": 40.7313977,
   "lng": -73.9858961,
   "address": "199 2nd Ave, New York, NY 10003",
-  "rating": 4,
   "priceLower": 50,
   "priceHigher": 100,
-  "specialRecommendation": false,
   "comment": {
     "zh": "韩餐，比较精致、创新菜。",
     "en": "Refined Korean cuisine with creative dishes."

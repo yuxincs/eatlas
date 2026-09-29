@@ -717,22 +717,8 @@ function renderRestaurantList(restaurants, markerIndex) {
     button.style.setProperty("--restaurant-accent", categoryColor);
     button.style.setProperty("--restaurant-accent-soft", toRgba(categoryColor, 0.24));
     const categoryLabel = getRestaurantListCategoryLabel(restaurant);
-    const ratingValue = getRestaurantRatingValue(restaurant);
-    const specialRecommendationLabel = getRestaurantSpecialRecommendationLabel(restaurant);
-    const ratingMarkup =
-      ratingValue !== null
-        ? `<p class="restaurant-rating" aria-label="${ratingValue} out of 5 stars">${buildStarRatingMarkup(ratingValue)}</p>`
-        : "";
-    const recommendationMarkup = specialRecommendationLabel
-      ? `<span class="restaurant-special-ribbon">${escapeHtml(specialRecommendationLabel)}</span>`
-      : "";
-    if (specialRecommendationLabel) {
-      button.classList.add("restaurant-button-has-ribbon");
-    }
     button.innerHTML = `
-      ${recommendationMarkup}
       <p class="restaurant-name">${escapeHtml(restaurant.name || "Untitled")}</p>
-      ${ratingMarkup}
       <p class="restaurant-meta">${escapeHtml(categoryLabel)}</p>
     `;
 
@@ -918,14 +904,6 @@ function getSubCategoryIcon(subCategoryKey, categoryKey) {
   return getCategoryIcon(categoryKey);
 }
 
-function getRestaurantRatingValue(restaurant) {
-  const rawRating = Number(restaurant.rating);
-  if (!Number.isFinite(rawRating)) {
-    return null;
-  }
-  return Math.max(1, Math.min(5, Math.round(rawRating)));
-}
-
 function normalizePriceBound(value) {
   const rawValue = Number(value);
   if (!Number.isFinite(rawValue)) {
@@ -968,29 +946,7 @@ function getRestaurantPriceRange(restaurant) {
   return { lower: upperBound, higher: lowerBound };
 }
 
-function getRestaurantSpecialRecommendationLabel(restaurant) {
-  if (restaurant?.specialRecommendation === true) {
-    return "Recommended";
-  }
-
-  return null;
-}
-
 function compareRestaurantsForList(leftRestaurant, rightRestaurant) {
-  const leftIsRecommended = getRestaurantSpecialRecommendationLabel(leftRestaurant) !== null;
-  const rightIsRecommended = getRestaurantSpecialRecommendationLabel(rightRestaurant) !== null;
-
-  if (leftIsRecommended !== rightIsRecommended) {
-    return rightIsRecommended ? 1 : -1;
-  }
-
-  const leftRating = getRestaurantRatingValue(leftRestaurant) ?? 0;
-  const rightRating = getRestaurantRatingValue(rightRestaurant) ?? 0;
-
-  if (rightRating !== leftRating) {
-    return rightRating - leftRating;
-  }
-
   const leftCategory = getRestaurantCategoryKey(leftRestaurant);
   const rightCategory = getRestaurantCategoryKey(rightRestaurant);
   const categoryCompare = leftCategory.localeCompare(rightCategory);
@@ -1006,13 +962,6 @@ function compareRestaurantsForList(leftRestaurant, rightRestaurant) {
   }
 
   return String(leftRestaurant.name || "").localeCompare(String(rightRestaurant.name || ""));
-}
-
-function buildStarRatingMarkup(ratingValue) {
-  const safeRating = Math.max(1, Math.min(5, Math.round(Number(ratingValue) || 0)));
-  const filledStars = "★".repeat(safeRating);
-  const emptyStars = "★".repeat(5 - safeRating);
-  return `${filledStars}<span class="rating-stars-empty">${emptyStars}</span>`;
 }
 
 function selectRestaurant(restaurantId, marker, restaurant, options) {
@@ -1172,10 +1121,6 @@ function getMapOverlayInsets() {
 function estimatePopupCardHeightPx(restaurant) {
   let estimatedHeight = 60;
 
-  if (getRestaurantRatingValue(restaurant) !== null) {
-    estimatedHeight += 16;
-  }
-
   if (getRestaurantPriceRange(restaurant) !== null) {
     estimatedHeight += 18;
   }
@@ -1233,15 +1178,6 @@ function buildPopupContent(restaurant) {
   const titleEl = document.createElement("h3");
   titleEl.textContent = restaurant.name || "Restaurant";
   container.appendChild(titleEl);
-
-  const ratingValue = getRestaurantRatingValue(restaurant);
-  if (ratingValue !== null) {
-    const ratingEl = document.createElement("p");
-    ratingEl.className = "popup-rating";
-    ratingEl.setAttribute("aria-label", `${ratingValue} out of 5 stars`);
-    ratingEl.innerHTML = buildStarRatingMarkup(ratingValue);
-    container.appendChild(ratingEl);
-  }
 
   const priceRange = getRestaurantPriceRange(restaurant);
   if (priceRange !== null) {

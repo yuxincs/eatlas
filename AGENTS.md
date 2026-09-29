@@ -28,7 +28,7 @@ This file captures working agreements for AI/code agents contributing to Eatlas.
 - Keep category display config in `data/meta.json` under `categoryConfig` (category icons/colors and sub-category icons).
 - Each `data/<item-id>/info.json` should include stable `id`, `name`, `category`, and valid numeric `lat`/`lng`.
 - `id` must match `<item-id>`.
-- Optional fields currently supported: `subCategory`, `address`, `rating`, `priceLower`, `priceHigher`, `specialRecommendation` (boolean), `comment`, `mapsUrl`, `reservationUrl`, `photos`.
+- Optional fields currently supported: `subCategory`, `address`, `priceLower`, `priceHigher`, `comment`, `mapsUrl`, `reservationUrl`, `photos`.
 - Local photos live in `data/<item-id>/images/`; build rewrites local photo paths into generated `index.json`.
 
 ## Development workflow
@@ -39,7 +39,7 @@ This file captures working agreements for AI/code agents contributing to Eatlas.
 ## UI and behavior guardrails
 - Preserve map-first interaction and sidebar/filter workflow.
 - Keep both desktop and mobile experiences working (breakpoint is currently `900px`).
-- Preserve list sort behavior: recommendation, rating (desc), category, sub-category, name.
+- Preserve list sort behavior: category, sub-category, name.
 - Avoid regressions in overlay controls (sidebar, filter dock, map controls).
 
 ## Change checklist for agents

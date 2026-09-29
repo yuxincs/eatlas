@@ -5,10 +5,8 @@
   "lat": 40.721252,
   "lng": -74.0096644,
   "address": "409 Greenwich St, New York, NY 10013",
-  "rating": 5,
   "priceLower": 100,
   "priceHigher": 150,
-  "specialRecommendation": false,
   "comment": {
     "zh": "干式熟成牛排风味浓郁、外焦里嫩，是这里最值得点的招牌；羊排不好吃，不推荐。",
     "en": "Excellent dry-aged steak with a deeply beefy flavor, a charred crust, and a tender center. Skip the lamb chops—they aren't good."

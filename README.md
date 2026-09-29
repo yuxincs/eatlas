@@ -1,6 +1,6 @@
 # Eatlas
 
-Eatlas is a map-first food guide web app where we curate standout places to eat with ratings, notes, and quick reservation links, such that it can be easily shared with friends and families.
+Eatlas is a map-first food guide web app where we curate standout places to eat with notes and quick reservation links, such that it can be easily shared with friends and families.
 
 Disclaimer: this project is mostly vibe-coded by codex 5.3 xhigh.
 
@@ -83,12 +83,8 @@ The build step reads all `data/*/info.json` entries and emits one combined `dist
 - `lat` (number): Latitude.
 - `lng` (number): Longitude.
 - `address` (string, optional): Address shown in popup.
-- `rating` (number, optional): 1-5 star rating.
 - `priceLower` (integer, optional): Lower bound of average price per person.
 - `priceHigher` (integer, optional): Upper bound of average price per person.
-- `specialRecommendation` (boolean, optional):
-  - `false` or missing: no ribbon
-  - `true`: shows the recommendation ribbon
 - `comment` (string, optional): Notes shown in popup.
 - `mapsUrl` (string, optional): "Open in Google Maps" link.
 - `reservationUrl` (string, optional): "Reserve Table" link.
@@ -103,11 +99,9 @@ If `photos` is omitted and local images exist, build auto-populates `photos` fro
 
 The list is sorted by:
 
-1. Recommendation status
-2. Rating (high to low)
-3. Category
-4. Sub-category
-5. Name
+1. Category
+2. Sub-category
+3. Name
 
 ## Map Attribution
 

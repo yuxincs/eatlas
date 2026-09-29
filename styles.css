@@ -588,39 +588,6 @@ body {
   font-weight: 700;
 }
 
-.restaurant-button.restaurant-button-has-ribbon .restaurant-name {
-  padding-right: 6.6rem;
-}
-
-.restaurant-special-ribbon {
-  position: absolute;
-  top: 0.46rem;
-  right: 0.48rem;
-  display: inline-flex;
-  align-items: center;
-  padding: 0.14rem 0.5rem;
-  border-radius: 999px;
-  border: 1px solid rgba(245, 158, 11, 0.42);
-  background: linear-gradient(140deg, rgba(254, 243, 199, 0.92), rgba(255, 237, 213, 0.96));
-  box-shadow: 0 4px 10px rgba(245, 158, 11, 0.18);
-  color: #9a3412;
-  font-size: 0.61rem;
-  line-height: 1;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  pointer-events: none;
-}
-
-.restaurant-rating {
-  margin: 0.22rem 0 0;
-  font-size: 0.78rem;
-  line-height: 1;
-  letter-spacing: 0.02em;
-  color: #d97706;
-  font-weight: 700;
-}
-
 .restaurant-meta {
   margin: 0.22rem 0 0;
   font-size: 0.8rem;
@@ -749,10 +716,6 @@ body {
   color: #9f1239;
 }
 
-.rating-stars-empty {
-  color: #d6d3d1;
-}
-
 .popup {
   max-width: 280px;
 }
@@ -760,15 +723,6 @@ body {
 .popup h3 {
   margin: 0 0 0.4rem;
   font-size: 0.98rem;
-}
-
-.popup .popup-rating {
-  margin: -0.1rem 0 0.35rem;
-  font-size: 0.82rem;
-  line-height: 1;
-  letter-spacing: 0.02em;
-  color: #d97706;
-  font-weight: 700;
 }
 
 .popup .popup-price {
