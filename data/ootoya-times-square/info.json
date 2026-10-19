@@ -11,5 +11,18 @@
   },
   "mapsUrl": "https://maps.app.goo.gl/bAX1cGm8vta81cN28?g_st=ipc",
   "reservationUrl": "https://resy.com/cities/new-york-ny/venues/ootoya-times-square",
-  "photos": []
+  "photos": [
+    {
+      "url": "01-aki-gozen.jpg",
+      "caption": "Grilled fish — Ootoya official photo"
+    },
+    {
+      "url": "02-onigiri.jpg",
+      "caption": "Onigiri — Ootoya official photo"
+    },
+    {
+      "url": "03-hotpot.jpg",
+      "caption": "Hot pot — Ootoya official photo"
+    }
+  ]
 }
