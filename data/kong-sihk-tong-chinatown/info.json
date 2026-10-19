@@ -14,8 +14,12 @@
   "reservationUrl": "",
   "photos": [
     {
-      "url": "01.jpg",
-      "caption": "Hong Kong-style stir-fried noodles. Photo: Kong Sihk Tong"
+      "url": "01-spaghetti.jpg",
+      "caption": "Two plates of Hong Kong-style spaghetti with meat"
+    },
+    {
+      "url": "02-beef-noodle-soup.jpg",
+      "caption": "Beef rice noodle soup with greens"
     }
   ]
 }
