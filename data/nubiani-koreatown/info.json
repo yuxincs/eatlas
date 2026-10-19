@@ -16,15 +16,15 @@
   "reservationUrl": "https://resy.com/cities/new-york-ny/venues/nubiani",
   "photos": [
     {
-      "url": "https://static.wixstatic.com/media/8acec1_1409f8d747db4f669a442db72c156db2~mv2.jpg/v1/fill/w_640,h_360,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/VIBE%20(30)%20(1).jpg",
+      "url": "01.jpg",
       "caption": "Nubiani Koreatown dining room"
     },
     {
-      "url": "https://static.wixstatic.com/media/8acec1_00f729bbb52841bba21b534efb10acc3~mv2.png/v1/fill/w_500,h_280,al_c,q_75,usm_0.66_1.00_0.01,enc_auto,quality_auto/%EB%84%88%EB%B9%84%EC%95%84%EB%8B%88%20%EC%82%AC%EC%A7%841.png",
+      "url": "02.png",
       "caption": "Prime rib eye on the grill"
     },
     {
-      "url": "https://static.wixstatic.com/media/8acec1_f2741f8b03b54eb290d2e357aa94f370~mv2.png/v1/fill/w_500,h_280,al_c,q_75,usm_0.66_1.00_0.01,enc_auto,quality_auto/%EB%84%88%EB%B9%84%EC%95%84%EB%8B%88%EC%82%AC%EC%A7%842.png",
+      "url": "03.png",
       "caption": "Prime rib eye set"
     }
   ]

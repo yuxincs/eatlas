@@ -1252,10 +1252,13 @@ function buildPhotoCarousel(photoEntries) {
   let progressFrameId = null;
   let progressCycleStartMs = 0;
   let transitionTimeoutId = null;
-  const photos = photoEntries.map((entry, i) => normalizePhoto(entry, i));
+  const photos = photoEntries.map((entry, i) => normalizePhoto(entry, i)).filter(Boolean);
 
   const wrap = document.createElement("div");
   wrap.className = "photo-wrap";
+  if (photos.length === 0) {
+    return wrap;
+  }
 
   const stageEl = document.createElement("div");
   stageEl.className = "photo-stage";
@@ -1423,10 +1426,7 @@ function normalizePhoto(photoEntry, i) {
     };
   }
 
-  return {
-    url: "https://picsum.photos/seed/fallback/640/360",
-    caption: `Photo ${i + 1}`
-  };
+  return null;
 }
 
 function setStatus(message, isError) {

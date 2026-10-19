@@ -145,6 +145,11 @@ function ensureBilingualCommentField(value, itemId) {
 }
 
 function normalizeLocalImageReference(photoPath, itemId) {
+  if (isAbsoluteUrl(photoPath.trim())) {
+    throw new Error(
+      `External photo URL '${photoPath}' in data/${itemId}/info.json is not allowed. Store the photo in data/${itemId}/images/ and reference its local filename.`
+    );
+  }
   const normalizedRelativePath = toPosixPath(photoPath).replace(/^\/+/, "");
   if (normalizedRelativePath.length === 0 || normalizedRelativePath.includes("..")) {
     throw new Error(
@@ -297,9 +302,6 @@ async function readGuideMeta() {
 
 function normalizePhotoEntry(photoEntry, itemId, imageFileSet) {
   if (typeof photoEntry === "string") {
-    if (isAbsoluteUrl(photoEntry)) {
-      return photoEntry;
-    }
     const normalizedLocalPath = normalizeLocalImageReference(photoEntry, itemId);
     if (!imageFileSet.has(normalizedLocalPath)) {
       throw new Error(
@@ -312,13 +314,6 @@ function normalizePhotoEntry(photoEntry, itemId, imageFileSet) {
   if (photoEntry && typeof photoEntry === "object" && !Array.isArray(photoEntry)) {
     if (typeof photoEntry.url !== "string" || photoEntry.url.trim().length === 0) {
       throw new Error(`Invalid photo entry in data/${itemId}/info.json. Each object photo needs a url.`);
-    }
-
-    if (isAbsoluteUrl(photoEntry.url)) {
-      return {
-        ...photoEntry,
-        url: photoEntry.url
-      };
     }
 
     const normalizedLocalPath = normalizeLocalImageReference(photoEntry.url, itemId);
@@ -335,7 +330,7 @@ function normalizePhotoEntry(photoEntry, itemId, imageFileSet) {
   }
 
   throw new Error(
-    `Invalid photo entry in data/${itemId}/info.json. Expected a URL string or object with a 'url' field.`
+    `Invalid photo entry in data/${itemId}/info.json. Expected a local image path or object with a local 'url' field.`
   );
 }
 

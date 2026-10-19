@@ -16,11 +16,11 @@
   "reservationUrl": "",
   "photos": [
     {
-      "url": "https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/images/NYC_Shuya_ClassicShoyuRamen_KatePrevite_00001_niepz5",
+      "url": "01.jpg",
       "caption": "Classic shoyu ramen. Photo: Kate Previte / The Infatuation"
     },
     {
-      "url": "https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/images/NYC_Shuya_DuckTsukemen_KatePrevite_00002_u4oxe3",
+      "url": "02.jpg",
       "caption": "Duck tsukemen. Photo: Kate Previte / The Infatuation"
     }
   ]

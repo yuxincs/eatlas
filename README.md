@@ -89,9 +89,10 @@ The build step reads all `data/*/info.json` entries and emits one combined `dist
 - `mapsUrl` (string, optional): "Open in Google Maps" link.
 - `reservationUrl` (string, optional): "Reserve Table" link.
 - `photos` (array, optional):
-  - Remote URL strings (left unchanged), or
   - Local image paths relative to `data/<item-id>/images/` (rewritten to `data/<item-id>/images/...` in output), or
-  - Objects like `{ "url": "...", "caption": "..." }`
+  - Objects like `{ "url": "01.jpg", "caption": "..." }`
+
+Always store photos in the repository under `data/<item-id>/images/`. External photo URLs are not allowed. The build rejects external URLs and missing local files, so deployed photos do not depend on third-party image hosting.
 
 If `photos` is omitted and local images exist, build auto-populates `photos` from files in `images/`.
 

@@ -30,6 +30,7 @@ This file captures working agreements for AI/code agents contributing to Eatlas.
 - `id` must match `<item-id>`.
 - Optional fields currently supported: `subCategory`, `address`, `priceLower`, `priceHigher`, `comment`, `mapsUrl`, `reservationUrl`, `photos`.
 - Local photos live in `data/<item-id>/images/`; build rewrites local photo paths into generated `index.json`.
+- Always store photos in the repository. Do not use external photo URLs or external fallback images; reference existing local files in `images/`.
 
 ## Development workflow
 - Run `npm run build` to regenerate `dist/`.
