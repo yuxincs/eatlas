@@ -23,6 +23,8 @@ Build output is emitted to `dist/`, including a generated/minified `dist/index.j
 
 ## Quick Start (Local)
 
+Use Node.js 22.22.3+, 24.15.0+, or 26+ (supported major versions). The GitHub Pages workflow uses Node.js 24.
+
 Install dependencies and build with npm:
 
 ```bash
