@@ -16,16 +16,12 @@
   "reservationUrl": "https://resy.com/cities/new-york-ny/venues/nubiani",
   "photos": [
     {
-      "url": "01.jpg",
-      "caption": "Nubiani Koreatown dining room"
+      "url": "01-bbq-spread.jpg",
+      "caption": "Korean BBQ meat platter and side dishes"
     },
     {
-      "url": "02.png",
-      "caption": "Prime rib eye on the grill"
-    },
-    {
-      "url": "03.png",
-      "caption": "Prime rib eye set"
+      "url": "02-jeon.jpg",
+      "caption": "Egg-battered slices with scallion salad"
     }
   ]
 }
