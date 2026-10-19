@@ -1211,6 +1211,24 @@ input:focus-visible {
 }
 
 @media (max-width: 900px) {
+  .map-wrap {
+    /* Thin mobile glass: avoid stacking opaque cards over the sheet. */
+    --glass-surface: linear-gradient(145deg, rgba(255, 255, 255, 0.38), rgba(244, 251, 251, 0.16));
+    --glass-blur: blur(10px) saturate(145%);
+  }
+  .map-wrap.mobile-sheet-layout .restaurant-button {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+  .map-wrap.mobile-sheet-layout .restaurant-button:hover {
+    background: rgba(255, 255, 255, 0.32);
+  }
+  .map-wrap.mobile-sheet-layout .restaurant-button.restaurant-button-active {
+    background: linear-gradient(130deg, rgba(222, 246, 235, 0.6), rgba(255, 255, 255, 0.26));
+  }
+  .map-wrap.mobile-sheet-layout .filter-btn:not(.filter-btn-active):not(.filter-btn-excluded) {
+    background: rgba(255, 255, 255, 0.28);
+  }
   .map-wrap.mobile-sheet-layout .hover-sidebar {
     border-radius: 28px;
     padding: 0;
