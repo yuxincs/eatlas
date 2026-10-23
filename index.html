@@ -54,7 +54,7 @@
         >
           <span class="hover-sidebar-heading-group">
             <span id="sidebarPanelLabel" class="hover-sidebar-title">Restaurants</span>
-            <span id="restaurantCount" class="hover-sidebar-count">Loading...</span>
+            <span id="restaurantCount" class="hover-sidebar-count" role="status" aria-live="polite" aria-atomic="true">Loading...</span>
           </span>
           <span class="hover-sidebar-header-indicator" aria-hidden="true">Hide</span>
         </button>
@@ -63,6 +63,12 @@
           class="hover-sidebar-language"
           aria-label="Comment language"
         ></div>
+        <div class="restaurant-search" role="search" aria-label="Search places">
+          <label class="visually-hidden" for="restaurantSearch">Search places</label>
+          <span class="restaurant-search-icon" aria-hidden="true">⌕</span>
+          <input id="restaurantSearch" type="search" placeholder="Search places, cuisines, notes…" autocomplete="off" enterkeyhint="search" spellcheck="false" aria-controls="restaurantList" aria-describedby="restaurantCount">
+          <button id="clearRestaurantSearch" class="restaurant-search-clear" type="button" aria-label="Clear search" hidden>×</button>
+        </div>
         <div class="hover-sidebar-body">
           <ul id="restaurantList" class="restaurant-list" aria-label="Restaurant list"></ul>
         </div>

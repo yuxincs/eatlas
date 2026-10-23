@@ -84,6 +84,10 @@ let subCategoryIconByName = {};
 let defaultCategoryIcon = FALLBACK_DEFAULT_CATEGORY_ICON;
 let availableCommentLanguageCodes = [];
 let activeCommentLanguageCode = DEFAULT_COMMENT_LANGUAGE_CODE;
+let restaurantSearchEl;
+let clearRestaurantSearchEl;
+let searchTerms = [];
+let restaurantSearchIndex = new Map();
 
 document.addEventListener("DOMContentLoaded", () => {
   statusMessageEl = document.getElementById("statusMessage");
@@ -130,6 +134,7 @@ async function initApp() {
     });
 
     allRestaurants = restaurants;
+    restaurantSearchIndex = new Map(restaurants.map((restaurant) => [restaurant, getRestaurantSearchText(restaurant)]));
     renderGuideLanguageSwitch(restaurants);
     markerIndex = addRestaurantMarkers(restaurants);
     renderCategoryFilters(restaurants);
@@ -695,11 +700,17 @@ function renderRestaurantList(restaurants, markerIndex) {
 
   const totalCount = allRestaurants.length || restaurants.length;
   countEl.textContent =
-    !hasCategoryFilters()
+    !hasCategoryFilters() && searchTerms.length === 0
       ? `${restaurants.length} places`
       : `${restaurants.length} of ${totalCount} places`;
   listEl.innerHTML = "";
   restaurantButtonIndex.clear();
+  if (restaurants.length === 0) {
+    const emptyEl = document.createElement("li");
+    emptyEl.className = "restaurant-search-empty";
+    emptyEl.textContent = "No places found. Try another search or adjust the category filters.";
+    listEl.appendChild(emptyEl);
+  }
   const sortedRestaurants = [...restaurants].sort(compareRestaurantsForList);
 
   sortedRestaurants.forEach((restaurant, i) => {
@@ -731,6 +742,9 @@ function renderRestaurantList(restaurants, markerIndex) {
     });
 
     restaurantButtonIndex.set(id, button);
+    if (activeRestaurantId === id) {
+      setActiveRestaurantSelection(id, button, marker);
+    }
     item.appendChild(button);
     listEl.appendChild(item);
   });
@@ -816,6 +830,29 @@ function isRestaurantVisibleForCategoryFilters(restaurant) {
   return selectedCategorySet.size === 0 || selectedCategorySet.has(categoryKey);
 }
 
+function normalizeSearchText(value) {
+  return String(value || "").normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase().trim();
+}
+
+function getRestaurantSearchText(restaurant) {
+  const comments = normalizeLocalizedTextMap(restaurant.comment);
+  return normalizeSearchText([
+    restaurant.name, restaurant.category, restaurant.subCategory, restaurant.address,
+    ...Object.values(comments || {})
+  ].filter(Boolean).join(" "));
+}
+
+function updateRestaurantSearch() {
+  searchTerms = normalizeSearchText(restaurantSearchEl?.value).split(/\s+/).filter(Boolean);
+  if (clearRestaurantSearchEl) {
+    clearRestaurantSearchEl.hidden = !restaurantSearchEl?.value;
+  }
+  if (sidebarBodyEl) {
+    sidebarBodyEl.scrollTop = 0;
+  }
+  applyCategoryFilters();
+}
+
 function applyCategoryFilters() {
   if (!map || allRestaurants.length === 0) {
     return;
@@ -826,7 +863,9 @@ function applyCategoryFilters() {
 
   allRestaurants.forEach((restaurant, index) => {
     const id = getRestaurantId(restaurant, index);
-    const isVisible = isRestaurantVisibleForCategoryFilters(restaurant);
+    const searchText = restaurantSearchIndex.get(restaurant) || "";
+    const isVisible = isRestaurantVisibleForCategoryFilters(restaurant)
+      && searchTerms.every((term) => searchText.includes(term));
     const marker = markerIndex.get(id);
 
     if (isVisible) {
@@ -1479,6 +1518,30 @@ function bindSidebarEvents() {
   mapOpenSidebarBtnEl?.addEventListener("click", toggleSidebar);
   sidebarHeaderToggleBtnEl?.addEventListener("click", toggleSidebar);
   sidebarHeaderToggleBtnEl?.addEventListener("pointerdown", handleMobileSheetResizeStart);
+  restaurantSearchEl?.addEventListener("input", updateRestaurantSearch);
+  restaurantSearchEl?.addEventListener("focus", () => {
+    if (isMobileLayoutActive) {
+      setMobileSheetHeight(getMobileSheetMaxHeightPx());
+    }
+  });
+  restaurantSearchEl?.addEventListener("search", updateRestaurantSearch);
+  restaurantSearchEl?.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      event.stopPropagation();
+      restaurantSearchEl.value = "";
+      updateRestaurantSearch();
+    }
+    if (event.key === "Enter") {
+      event.preventDefault();
+      restaurantSearchEl.blur();
+    }
+  });
+  clearRestaurantSearchEl?.addEventListener("click", () => {
+    restaurantSearchEl.value = "";
+    updateRestaurantSearch();
+    restaurantSearchEl.focus();
+  });
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
@@ -1528,6 +1591,8 @@ function cacheSidebarElements() {
     ".hover-sidebar-header-indicator"
   );
   guideLanguageSwitchEl = document.getElementById(GUIDE_LANGUAGE_SWITCH_ID);
+  restaurantSearchEl = document.getElementById("restaurantSearch");
+  clearRestaurantSearchEl = document.getElementById("clearRestaurantSearch");
   filterDockEl = document.getElementById(FILTER_DOCK_ID);
   if (filterDockEl && !filterDockOriginalParentEl) {
     filterDockOriginalParentEl = filterDockEl.parentElement;
@@ -1687,7 +1752,15 @@ function resetMobileSheetLayout() {
 function getMobileSheetMinHeightPx() {
   const headerHeight = sidebarHeaderToggleBtnEl?.offsetHeight ?? 0;
   const filterHeight = filterDockEl?.offsetHeight ?? 0;
-  const measuredMin = headerHeight > 0 ? headerHeight + Math.min(filterHeight, 76) + 8 : 0;
+  const languageHeight = guideLanguageSwitchEl?.offsetHeight ?? 0;
+  const searchPanel = restaurantSearchEl?.closest(".restaurant-search");
+  const searchStyle = searchPanel ? window.getComputedStyle(searchPanel) : null;
+  const searchHeight = (searchPanel?.offsetHeight ?? 0)
+    + (Number.parseFloat(searchStyle?.marginTop) || 0)
+    + (Number.parseFloat(searchStyle?.marginBottom) || 0);
+  const measuredMin = headerHeight > 0
+    ? headerHeight + filterHeight + languageHeight + searchHeight + 8
+    : 0;
   return Math.max(MOBILE_SHEET_MIN_HEIGHT_PX, Math.round(measuredMin));
 }
 
@@ -1737,9 +1810,12 @@ function setMobileSheetHeight(heightPx, options = {}) {
 function initializeMobileSheetHeight(options = {}) {
   const { skipMapInvalidate = false } = options;
   const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
-  const defaultHeight = Math.round(viewportHeight * MOBILE_SHEET_DEFAULT_HEIGHT_RATIO);
+  const defaultHeight = Math.max(
+    Math.round(viewportHeight * MOBILE_SHEET_DEFAULT_HEIGHT_RATIO),
+    getMobileSheetMinHeightPx() + 96
+  );
   const targetHeight =
-    mobileSheetHeightPx === null ? defaultHeight : mobileSheetHeightPx;
+    mobileSheetHeightPx === null ? defaultHeight : Math.max(mobileSheetHeightPx, defaultHeight);
   setMobileSheetHeight(targetHeight, {
     skipMapInvalidate
   });
